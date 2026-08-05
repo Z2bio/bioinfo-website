@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="#293650" name="theme-color"/>
-<meta content="深圳市知图生物科技有限公司提供生命科学数据分析、生物信息技术服务、临检生信系统开发、生物医药证据与资源研究及项目执行支持。" name="description"/>
+<meta content="深圳市知图生物科技有限公司提供生命科学数据分析、生物信息技术服务、临床实验室与生物信息系统开发、生物医药证据与资源研究及项目执行支持。" name="description"/>
 <meta content="知图生物｜生命科学数据分析与生物信息技术服务" property="og:title"/>
 <meta content="科研数据分析、临检生信系统开发、生物医药证据与资源研究、项目方案与执行支持。" property="og:description"/>
 <meta content="website" property="og:type"/>
@@ -1430,50 +1430,982 @@
       }
     }
 
-    /* V23: production polish for card proportions and regulated-life-science wording */
-    .card,
-    .client-card,
-    .testimonial-card,
-    .glass,
-    .dark-shell,
-    #contact > div > div {
-      border-radius: 22px !important;
+
+    /* V24: horizontal service and case-study carousels */
+    .content-carousel {
+      --carousel-gap: 1.5rem;
+      position: relative;
+      min-width: 0;
     }
 
-    .diagram-box {
-      border-radius: 18px !important;
+    .carousel-viewport {
+      width: 100%;
+      min-width: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+      border-radius: 22px;
+      outline: none;
+      transition: height .42s cubic-bezier(.22,.61,.36,1);
+      cursor: grab;
     }
 
-    #cases .case-card-compact {
-      height: auto !important;
-      min-height: 0 !important;
+    .carousel-viewport::-webkit-scrollbar {
+      display: none;
     }
 
-    #cases .case-card-compact .diagram-box {
-      display: none !important;
+    .carousel-viewport:active {
+      cursor: grabbing;
     }
 
-    #cases .case-card-compact p {
-      line-height: 1.7 !important;
+    .carousel-viewport:focus-visible {
+      box-shadow: 0 0 0 3px rgba(125, 215, 204, .20);
     }
 
-    #cases .case-card-compact .text-xs {
-      margin-top: 1rem !important;
+    .carousel-track {
+      display: flex;
+      align-items: stretch;
+      gap: var(--carousel-gap);
+      min-width: 100%;
+      width: max-content;
+    }
+
+    .carousel-slide {
+      display: flex;
+      min-width: 0;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    .carousel-slide > article {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide {
+      flex: 0 0 calc((100vw - 3rem - var(--carousel-gap)) / 2);
+      max-width: calc((80rem - 3rem - var(--carousel-gap)) / 2);
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-slide {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .case-card {
+      max-width: none;
+    }
+
+    .carousel-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 1rem;
+      min-height: 48px;
+      margin-top: 1.25rem;
+    }
+
+    .carousel-status {
+      margin-right: auto;
+      color: var(--muted);
+      font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif;
+      font-size: .76rem;
+      font-weight: 600;
+      letter-spacing: .10em;
+      opacity: .78;
+    }
+
+    .carousel-navigation {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: .65rem;
+      padding: .38rem .45rem .38rem .8rem;
+      border: 1px solid rgba(170, 202, 235, .16);
+      border-radius: 999px;
+      background: rgba(16, 30, 60, .42);
+      box-shadow: 0 12px 30px rgba(5, 13, 28, .14);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .carousel-dots {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: .46rem;
+    }
+
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(210, 225, 244, .32);
+      cursor: pointer;
+      transition:
+        width .25s ease,
+        background .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+    }
+
+    .carousel-dot:hover {
+      transform: scale(1.18);
+      background: rgba(203, 230, 241, .62);
+    }
+
+    .carousel-dot.active {
+      width: 23px;
+      background: linear-gradient(90deg, #89b8ec, #7dd7cc);
+      box-shadow: 0 0 18px rgba(125, 215, 204, .26);
+    }
+
+    .carousel-dot:focus-visible {
+      outline: 2px solid #9ddfd4;
+      outline-offset: 3px;
+    }
+
+    .carousel-arrow {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      padding: 0;
+      border: 1px solid rgba(195, 217, 240, .16);
+      border-radius: 999px;
+      color: #eaf3ff;
+      background: rgba(255, 255, 255, .055);
+      cursor: pointer;
+      transition:
+        transform .22s ease,
+        background .22s ease,
+        border-color .22s ease,
+        opacity .22s ease;
+    }
+
+    .carousel-arrow svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .carousel-arrow:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: rgba(125, 215, 204, .38);
+      background: rgba(125, 215, 204, .12);
+    }
+
+    .carousel-arrow:disabled {
+      opacity: .32;
+      cursor: default;
+    }
+
+    .carousel-arrow:focus-visible {
+      outline: 2px solid #9ddfd4;
+      outline-offset: 2px;
     }
 
     @media (min-width: 1280px) {
-      html[data-lang="en"] #clients .mt-14.grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-      }
-      html[data-lang="en"] #clients .client-card {
-        min-height: 0 !important;
-        padding: 1.8rem !important;
+      .content-carousel[data-carousel-mode="services"] .carousel-slide {
+        flex-basis: calc((80rem - 3rem - var(--carousel-gap)) / 2);
       }
     }
 
-    html[data-lang="en"] #clients .client-card p,
-    html[data-lang="en"] #clients .client-need {
-      line-height: 1.62 !important;
+    @media (max-width: 899px) {
+      .content-carousel {
+        --carousel-gap: 1rem;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-slide,
+      .content-carousel[data-carousel-mode="cases"] .carousel-slide {
+        flex-basis: 100%;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 639px) {
+      .content-carousel {
+        margin-top: 2.5rem !important;
+      }
+
+      .carousel-viewport {
+        border-radius: 18px;
+      }
+
+      .carousel-footer {
+        margin-top: .9rem;
+      }
+
+      .carousel-status {
+        display: none;
+      }
+
+      .carousel-navigation {
+        margin-left: auto;
+        padding-left: .65rem;
+      }
+
+      .carousel-arrow {
+        width: 32px;
+        height: 32px;
+        flex-basis: 32px;
+      }
+
+      .carousel-dot {
+        width: 6px;
+        height: 6px;
+      }
+
+      .carousel-dot.active {
+        width: 19px;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-slide article {
+        padding: 1.35rem !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .carousel-viewport {
+        scroll-behavior: auto;
+        transition: none;
+      }
+
+      .carousel-dot,
+      .carousel-arrow {
+        transition: none;
+      }
+    }
+
+
+    /* V25: stable full-width case-study carousel, styled as a large visual showcase */
+    .content-carousel[data-carousel-mode="cases"] {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-viewport {
+      position: relative;
+      width: 100%;
+      min-height: 640px;
+      border: 1px solid rgba(166, 202, 231, .16);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 88% 12%, rgba(125, 215, 204, .08), transparent 26%),
+        linear-gradient(145deg, rgba(23, 37, 72, .52), rgba(28, 53, 72, .30));
+      box-shadow:
+        0 24px 60px rgba(4, 12, 27, .18),
+        inset 0 1px 0 rgba(255, 255, 255, .055);
+      cursor: grab;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-track {
+      width: 100% !important;
+      min-width: 100% !important;
+      align-items: flex-start;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-slide {
+      display: block !important;
+      flex: 0 0 100% !important;
+      width: 100% !important;
+      min-width: 100% !important;
+      max-width: 100% !important;
+      padding: 0;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-slide > article,
+    .content-carousel[data-carousel-mode="cases"] .case-card {
+      display: flex !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: clamp(1.45rem, 2.7vw, 2.45rem) !important;
+      padding-bottom: clamp(5rem, 7vw, 6.4rem) !important;
+      border: 0 !important;
+      border-radius: 21px !important;
+      background:
+        radial-gradient(circle at 91% 8%, rgba(126, 205, 212, .095), transparent 24%),
+        linear-gradient(145deg, rgba(74, 89, 126, .92), rgba(52, 75, 93, .88)) !important;
+      box-shadow: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      visibility: visible !important;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .case-card:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .case-card > h3 {
+      max-width: 1080px;
+      font-size: clamp(1.55rem, 2.25vw, 2.35rem) !important;
+      line-height: 1.16;
+      letter-spacing: -.025em;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .case-card > p {
+      max-width: 1080px;
+      font-size: clamp(.94rem, 1.18vw, 1.08rem) !important;
+      line-height: 1.85 !important;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .diagram-box {
+      width: 100%;
+      margin-top: clamp(1.35rem, 2.3vw, 2rem);
+      padding: clamp(.75rem, 1.6vw, 1.25rem);
+      border-color: rgba(190, 216, 237, .24);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 94% 7%, rgba(55, 125, 158, .055), transparent 25%),
+        linear-gradient(180deg, rgba(255,255,255,.995), rgba(244,248,251,.985));
+      box-shadow:
+        0 22px 50px rgba(6, 17, 31, .14),
+        inset 0 1px 0 rgba(255,255,255,.94);
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .diagram-title {
+      margin-bottom: .8rem;
+      color: #587181;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-footer {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      display: block;
+      min-height: 0;
+      margin: 0;
+      pointer-events: none;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-status {
+      position: absolute;
+      left: clamp(1.2rem, 2.4vw, 2rem);
+      bottom: clamp(1.25rem, 2.3vw, 1.85rem);
+      z-index: 3;
+      margin: 0;
+      color: rgba(237, 245, 255, .72);
+      pointer-events: none;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-navigation {
+      display: contents;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-dots {
+      position: absolute;
+      right: clamp(1.25rem, 2.5vw, 2.15rem);
+      bottom: clamp(1.25rem, 2.3vw, 1.85rem);
+      z-index: 4;
+      gap: .68rem;
+      padding: .62rem .8rem;
+      border: 1px solid rgba(211, 229, 246, .16);
+      border-radius: 999px;
+      background: rgba(9, 22, 41, .38);
+      box-shadow: 0 12px 28px rgba(5, 13, 27, .18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      pointer-events: auto;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-dot {
+      width: 10px;
+      height: 10px;
+      background: rgba(245, 250, 255, .56);
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-dot.active {
+      width: 10px;
+      background: transparent;
+      border: 2px solid #f2f8ff;
+      box-shadow: 0 0 0 2px rgba(125, 215, 204, .18);
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      z-index: 5;
+      width: 52px;
+      height: 78px;
+      border: 1px solid rgba(221, 236, 250, .17);
+      border-radius: 14px;
+      color: #f5f9ff;
+      background: rgba(18, 48, 70, .62);
+      box-shadow: 0 14px 34px rgba(5, 13, 27, .18);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transform: translateY(-50%);
+      pointer-events: auto;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-arrow:hover:not(:disabled) {
+      transform: translateY(-50%);
+      background: rgba(48, 104, 128, .78);
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-arrow svg {
+      width: 28px;
+      height: 28px;
+      stroke-width: 1.5;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-prev {
+      left: clamp(.65rem, 1.4vw, 1.2rem);
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-next {
+      right: clamp(.65rem, 1.4vw, 1.2rem);
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-arrow:disabled {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @media (max-width: 767px) {
+      .content-carousel[data-carousel-mode="cases"] .carousel-viewport {
+        min-height: 520px;
+        border-radius: 18px;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .carousel-slide > article,
+      .content-carousel[data-carousel-mode="cases"] .case-card {
+        padding: 1.15rem !important;
+        padding-bottom: 5.2rem !important;
+        border-radius: 17px !important;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .carousel-arrow {
+        top: 48%;
+        width: 40px;
+        height: 60px;
+        border-radius: 12px;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .carousel-arrow svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .carousel-dots {
+        right: .9rem;
+        bottom: .9rem;
+        gap: .5rem;
+        padding: .5rem .65rem;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .carousel-status {
+        left: 1rem;
+        bottom: 1.05rem;
+        display: block;
+        font-size: .68rem;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .diagram-box svg {
+        min-height: 280px;
+      }
+    }
+
+
+    /* V26: fixed carousel geometry, compact proportions and hover selection */
+    .content-carousel[data-carousel="services"],
+    .content-carousel[data-carousel="cases"] {
+      width: min(100%, 1120px);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Core services: fixed height across both pages */
+    .content-carousel[data-carousel-mode="services"] .carousel-viewport {
+      height: 430px !important;
+      min-height: 430px !important;
+      max-height: 430px !important;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-track,
+    .content-carousel[data-carousel-mode="services"] .carousel-slide {
+      height: 100%;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide > article {
+      height: 100% !important;
+      min-height: 0 !important;
+      padding: 1.65rem !important;
+      overflow: hidden;
+      border: 1px solid rgba(170, 205, 230, .12);
+      transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide:hover > article {
+      transform: translateY(-3px) scale(.997);
+      border-color: rgba(125, 215, 204, .46);
+      background: rgba(255, 255, 255, .115);
+      box-shadow:
+        0 20px 42px rgba(4, 13, 28, .20),
+        inset 0 0 0 1px rgba(151, 223, 214, .10);
+      filter: brightness(1.045);
+    }
+
+    /* Case studies: one stable height based on a compact presentation */
+    .content-carousel[data-carousel-mode="cases"] .carousel-viewport {
+      height: 860px !important;
+      min-height: 860px !important;
+      max-height: 860px !important;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-track,
+    .content-carousel[data-carousel-mode="cases"] .carousel-slide {
+      height: 100%;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-slide > article,
+    .content-carousel[data-carousel-mode="cases"] .case-card {
+      height: 100% !important;
+      max-height: 100% !important;
+      padding: 1.65rem 1.8rem 5.4rem !important;
+      overflow-y: auto !important;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(144, 196, 207, .35) transparent;
+      outline: 1px solid transparent;
+      outline-offset: -1px;
+      transition:
+        outline-color .25s ease,
+        background .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .case-card::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .case-card::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(144, 196, 207, .28);
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-slide:hover > article,
+    .content-carousel[data-carousel-mode="cases"] .case-card:hover {
+      outline-color: rgba(125, 215, 204, .48) !important;
+      background:
+        radial-gradient(circle at 91% 8%, rgba(126, 205, 212, .14), transparent 25%),
+        linear-gradient(145deg, rgba(79, 95, 134, .95), rgba(56, 81, 101, .92)) !important;
+      box-shadow:
+        inset 0 0 0 1px rgba(151, 223, 214, .08),
+        0 20px 46px rgba(4, 13, 28, .16) !important;
+      filter: brightness(1.035);
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .diagram-box {
+      margin-top: 1.15rem;
+      padding: .78rem;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .case-card > h3 {
+      font-size: clamp(1.4rem, 2vw, 2rem) !important;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .case-card > p {
+      font-size: clamp(.9rem, 1.05vw, 1rem) !important;
+      line-height: 1.75 !important;
+    }
+
+    /* A short progress accent makes autoplay easier to perceive */
+    .content-carousel .carousel-dot.active {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-carousel .carousel-dot.active::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, rgba(255,255,255,.18), rgba(255,255,255,.72));
+      transform-origin: left center;
+      animation: carousel-dot-progress 6s linear forwards;
+    }
+
+    .content-carousel[data-carousel="cases"] .carousel-dot.active::after {
+      animation-duration: 7s;
+    }
+
+    @keyframes carousel-dot-progress {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    .content-carousel:hover .carousel-dot.active::after,
+    .content-carousel:focus-within .carousel-dot.active::after {
+      animation-play-state: paused;
+    }
+
+    @media (max-width: 899px) {
+      .content-carousel[data-carousel-mode="services"] .carousel-viewport {
+        height: 390px !important;
+        min-height: 390px !important;
+        max-height: 390px !important;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .carousel-viewport {
+        height: 760px !important;
+        min-height: 760px !important;
+        max-height: 760px !important;
+      }
+    }
+
+    @media (max-width: 639px) {
+      .content-carousel[data-carousel="services"],
+      .content-carousel[data-carousel="cases"] {
+        width: 100%;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-viewport {
+        height: 360px !important;
+        min-height: 360px !important;
+        max-height: 360px !important;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-slide > article {
+        padding: 1.25rem !important;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .carousel-viewport {
+        height: 650px !important;
+        min-height: 650px !important;
+        max-height: 650px !important;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .carousel-slide > article,
+      .content-carousel[data-carousel-mode="cases"] .case-card {
+        padding: 1.05rem 1.05rem 4.8rem !important;
+      }
+    }
+
+    /* V27: repair service-carousel geometry and make the selected slide perceptible */
+    .content-carousel[data-carousel-mode="services"] .carousel-viewport {
+      height: 500px !important;
+      min-height: 500px !important;
+      max-height: 500px !important;
+    }
+
+    html[data-lang="en"] .content-carousel[data-carousel-mode="services"] .carousel-viewport {
+      height: 540px !important;
+      min-height: 540px !important;
+      max-height: 540px !important;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-track {
+      align-items: stretch;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide {
+      width: calc((100vw - 3rem - var(--carousel-gap)) / 2);
+      min-width: 0;
+    }
+
+    @media (min-width: 1280px) {
+      .content-carousel[data-carousel-mode="services"] .carousel-slide {
+        width: calc((80rem - 3rem - var(--carousel-gap)) / 2);
+      }
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide > article {
+      position: relative;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(144, 196, 207, .34) transparent;
+      outline: 1px solid transparent;
+      outline-offset: -1px;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide > article::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide > article::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(144, 196, 207, .30);
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide > article::after {
+      content: '';
+      position: absolute;
+      right: 1.25rem;
+      bottom: 1.12rem;
+      width: 38px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #8ebcf0, #7de0d1);
+      opacity: 0;
+      transform: scaleX(.34);
+      transform-origin: right center;
+      transition: opacity .22s ease, transform .22s ease;
+      pointer-events: none;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide.is-active > article,
+    .content-carousel[data-carousel-mode="services"] .carousel-slide:hover > article {
+      outline-color: rgba(125, 215, 204, .50);
+      border-color: rgba(125, 215, 204, .46);
+      background: rgba(255, 255, 255, .13);
+      box-shadow:
+        0 22px 48px rgba(4, 13, 28, .22),
+        inset 0 0 0 1px rgba(151, 223, 214, .12);
+      filter: brightness(1.055);
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide.is-active > article::after,
+    .content-carousel[data-carousel-mode="services"] .carousel-slide:hover > article::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide:hover > article {
+      transform: translateY(-5px) scale(.997);
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide > article h3 {
+      line-height: 1.2;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide > article p {
+      line-height: 1.68 !important;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide > article .grid {
+      gap: .65rem !important;
+      margin-top: 1rem !important;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide > article .grid > div {
+      padding: .78rem .9rem !important;
+      line-height: 1.45;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .tag {
+      max-width: 48%;
+      line-height: 1.25;
+      white-space: normal;
+      justify-content: center;
+      text-align: center;
+    }
+
+    @media (max-width: 899px) {
+      .content-carousel[data-carousel-mode="services"] .carousel-viewport {
+        height: 520px !important;
+        min-height: 520px !important;
+        max-height: 520px !important;
+      }
+
+      html[data-lang="en"] .content-carousel[data-carousel-mode="services"] .carousel-viewport {
+        height: 580px !important;
+        min-height: 580px !important;
+        max-height: 580px !important;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-track {
+        width: 100% !important;
+        min-width: 100% !important;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-slide {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+      }
+    }
+
+    @media (max-width: 639px) {
+      .content-carousel[data-carousel-mode="services"] .carousel-viewport {
+        height: 560px !important;
+        min-height: 560px !important;
+        max-height: 560px !important;
+      }
+
+      html[data-lang="en"] .content-carousel[data-carousel-mode="services"] .carousel-viewport {
+        height: 590px !important;
+        min-height: 590px !important;
+        max-height: 590px !important;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-slide > article {
+        padding: 1.1rem !important;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-slide > article .flex.items-start {
+        align-items: flex-start;
+        gap: .85rem;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-slide > article h3 {
+        margin-top: .9rem !important;
+        font-size: 1.34rem !important;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .service-no {
+        font-size: 2rem;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .tag {
+        max-width: 44%;
+        padding: .36rem .58rem;
+        font-size: .68rem;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-slide > article p {
+        margin-top: .9rem !important;
+        font-size: .92rem;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-slide > article .grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+      }
+
+      .content-carousel[data-carousel-mode="services"] .carousel-slide > article .grid > div {
+        padding: .68rem .78rem !important;
+      }
+
+      html[data-lang="en"] .content-carousel[data-carousel-mode="services"] .carousel-slide > article {
+        padding: .92rem !important;
+      }
+
+      html[data-lang="en"] .content-carousel[data-carousel-mode="services"] .carousel-slide > article h3 {
+        font-size: 1.12rem !important;
+        line-height: 1.13;
+      }
+
+      html[data-lang="en"] .content-carousel[data-carousel-mode="services"] .service-no {
+        font-size: 1.72rem;
+      }
+
+      html[data-lang="en"] .content-carousel[data-carousel-mode="services"] .tag {
+        max-width: 42%;
+        font-size: .60rem;
+        line-height: 1.18;
+      }
+
+      html[data-lang="en"] .content-carousel[data-carousel-mode="services"] .carousel-slide > article p {
+        font-size: .80rem;
+        line-height: 1.48 !important;
+      }
+
+      html[data-lang="en"] .content-carousel[data-carousel-mode="services"] .carousel-slide > article .grid {
+        gap: .42rem !important;
+        margin-top: .72rem !important;
+      }
+
+      html[data-lang="en"] .content-carousel[data-carousel-mode="services"] .carousel-slide > article .grid > div {
+        padding: .48rem .58rem !important;
+        font-size: .74rem;
+        line-height: 1.26;
+      }
+    }
+
+    /* V28: keep service pages exact and case diagrams fully visible */
+    .content-carousel[data-carousel-mode="services"] .carousel-track {
+      width: 100% !important;
+      min-width: 100% !important;
+    }
+
+    .content-carousel[data-carousel-mode="services"] .carousel-slide {
+      flex: 0 0 calc((100% - var(--carousel-gap)) / 2) !important;
+      width: calc((100% - var(--carousel-gap)) / 2) !important;
+      min-width: calc((100% - var(--carousel-gap)) / 2) !important;
+      max-width: calc((100% - var(--carousel-gap)) / 2) !important;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .carousel-viewport {
+      height: 960px !important;
+      min-height: 960px !important;
+      max-height: none !important;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .diagram-box svg {
+      display: block;
+      width: 100%;
+      height: 560px !important;
+      min-height: 0 !important;
+      max-height: none !important;
+    }
+
+    .content-carousel[data-carousel-mode="cases"] .report-diagram svg {
+      height: 620px !important;
+    }
+
+    .content-carousel:hover .carousel-dot.active::after,
+    .content-carousel:focus-within .carousel-dot.active::after {
+      animation-play-state: running;
+    }
+
+    @media (max-width: 899px) {
+      .content-carousel[data-carousel-mode="services"] .carousel-slide {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .carousel-viewport {
+        height: 860px !important;
+        min-height: 860px !important;
+        max-height: none !important;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .diagram-box svg {
+        height: 520px !important;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .report-diagram svg {
+        height: 560px !important;
+      }
+    }
+
+    @media (max-width: 639px) {
+      .content-carousel[data-carousel-mode="cases"] .carousel-viewport {
+        height: 820px !important;
+        min-height: 820px !important;
+        max-height: none !important;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .diagram-box svg {
+        height: 430px !important;
+      }
+
+      .content-carousel[data-carousel-mode="cases"] .report-diagram svg {
+        height: 470px !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .content-carousel .carousel-dot.active::after {
+        animation: none;
+      }
     }
 
 </style>
@@ -1558,7 +2490,7 @@
 <span class="hero-line accent-text">与生物信息技术服务</span>
 </h1>
 <p class="mt-7 max-w-2xl text-lg leading-8 text-[var(--muted)]">
-            深圳市知图生物科技有限公司面向医院、高校、科研团队、检验机构及生物医药企业，提供临床数据与多组学分析、科研项目支持、临检生信系统开发、生物医药证据与资源研究，以及复杂项目的方案设计和执行支持。
+            深圳市知图生物科技有限公司面向医院、高校、科研团队、检验机构及生物医药企业，提供临床数据与多组学分析、科研项目支持、临床实验室与生物信息系统开发、生物医药证据与资源研究，以及复杂项目的方案设计和执行支持。
           </p>
 <div class="mt-9 flex flex-wrap gap-4">
 <a class="btn-primary" href="#services">了解核心服务
@@ -1592,17 +2524,17 @@
 </a>
 <a class="dark-card block p-6" href="#services">
 <div class="flex items-start justify-between gap-4">
-<h3 class="text-lg font-semibold">02 生信系统开发</h3>
+<h3 class="text-lg font-semibold">02 生物信息系统开发</h3>
 <span class="dark-arrow">↗</span>
 </div>
-<p class="dark-muted mt-5 text-sm leading-7">16S、宏基因组、WES/WGS 等分析流程、报告系统与部署。</p>
+<p class="dark-muted mt-5 text-sm leading-7">16S、宏基因组、WES/WGS 等生物信息分析流程、报告系统与部署。</p>
 </a>
 <a class="dark-card block p-6" href="#services">
 <div class="flex items-start justify-between gap-4">
-<h3 class="text-lg font-semibold">03 证据与资源研究</h3>
+<h3 class="text-lg font-semibold">03 生物医药证据与资源研究</h3>
 <span class="dark-arrow">↗</span>
 </div>
-<p class="dark-muted mt-5 text-sm leading-7">围绕疾病领域、证据需求、医院能力和数据资源开展研究与匹配。</p>
+<p class="dark-muted mt-5 text-sm leading-7">围绕疾病领域、证据需求、医院能力、数据资源和合作目标开展研究与匹配。</p>
 </a>
 <a class="dark-card block p-6" href="#services">
 <div class="flex items-start justify-between gap-4">
@@ -1657,27 +2589,58 @@
 <section class="py-24 lg:py-32" id="services">
 <div class="mx-auto max-w-7xl px-6">
 <div class="reveal max-w-3xl"><span class="eyebrow">Core Services</span><h2 class="section-title display mt-5 font-bold module-title">核心服务</h2><p class="muted mt-6 text-lg leading-8">围绕科研、临床检验和生物医药项目的实际需求，提供数据分析、系统开发、信息研究和项目执行服务。服务范围与交付内容根据项目资料和目标确定。</p></div>
-<div class="mt-14 grid gap-6 lg:grid-cols-2">
+<div
+  class="content-carousel mt-14"
+  data-carousel="services"
+  data-carousel-mode="services"
+  data-carousel-interval="6000"
+  data-label-zh="核心服务轮播"
+  data-label-en="Core Services Carousel">
+  <div class="carousel-viewport" tabindex="0" aria-label="核心服务轮播">
+    <div class="carousel-track">
+      <div class="carousel-slide" data-carousel-slide="0">
 <article class="card reveal p-7 md:p-9">
 <div class="flex items-start justify-between gap-4"><div><span class="service-no display">01</span><h3 class="mt-5 text-2xl font-semibold">科研数据分析与论文支持</h3></div><span class="tag">医院 / 高校 / 科研团队</span></div>
 <p class="muted mt-5 leading-7">面向临床真实数据、患者队列、公开数据库和多组学数据项目，提供研究设计、数据分析、成果整理和论文阶段支持。</p>
 <div class="mt-6 grid gap-3 sm:grid-cols-2 text-sm"><div class="rounded-xl border border-[var(--line)] p-4">课题设计、数据可行性审核</div><div class="rounded-xl border border-[var(--line)] p-4">数据清洗、统计与生信分析</div><div class="rounded-xl border border-[var(--line)] p-4">基金标书与项目申报支持</div><div class="rounded-xl border border-[var(--line)] p-4">发表级图表、结果与方法整理</div><div class="rounded-xl border border-[var(--line)] p-4">论文逻辑、返修与补充分析</div><div class="rounded-xl border border-[var(--line)] p-4">中英文材料整理与海外项目协作</div></div>
 </article>
+</div><div class="carousel-slide" data-carousel-slide="1">
 <article class="card reveal p-7 md:p-9" style="transition-delay:.06s">
-<div class="flex items-start justify-between gap-4"><div><span class="service-no display">02</span><h3 class="mt-5 text-2xl font-semibold">临检与生信分析系统开发</h3></div><span class="tag">检验机构 / 医院 / IVD / 测序公司</span></div>
+<div class="flex items-start justify-between gap-4"><div><span class="service-no display">02</span><h3 class="mt-5 text-2xl font-semibold">临床实验室与生物信息系统开发</h3></div><span class="tag">检验机构 / 医院 / IVD / 测序公司</span></div>
 <p class="muted mt-5 leading-7">根据业务流程、样例数据和报告需求，开发可运行、可追踪和可维护的分析流程及报告系统，适用于测序临检和科研生产化场景。</p>
 <div class="mt-6 grid gap-3 sm:grid-cols-2 text-sm"><div class="rounded-xl border border-[var(--line)] p-4">16S 与宏基因组分析系统</div><div class="rounded-xl border border-[var(--line)] p-4">WES / WGS / RNA-seq 流程</div><div class="rounded-xl border border-[var(--line)] p-4">自动质控、任务调度与日志</div><div class="rounded-xl border border-[var(--line)] p-4">报告模板与结果解释引擎</div><div class="rounded-xl border border-[var(--line)] p-4">本地化、私有化或云端部署</div><div class="rounded-xl border border-[var(--line)] p-4">验证方案、文档、培训与迭代</div></div>
 </article>
+</div><div class="carousel-slide" data-carousel-slide="2">
 <article class="card reveal p-7 md:p-9">
 <div class="flex items-start justify-between gap-4"><div><span class="service-no display">03</span><h3 class="mt-5 text-2xl font-semibold">生物医药证据与资源研究</h3></div><span class="tag">药企 / Biotech / CRO / 咨询机构</span></div>
-<p class="muted mt-5 leading-7">围绕疾病领域、研发阶段和证据需求，开展行业信息搜集、医院及科室调研、数据资源梳理和合作对象初筛。</p>
+<p class="muted mt-5 leading-7">围绕疾病领域、研发阶段和证据需求，开展市场与证据研究、医院及科室调研、数据资源梳理和合作对象初筛。</p>
 <div class="mt-6 grid gap-3 sm:grid-cols-2 text-sm"><div class="rounded-xl border border-[var(--line)] p-4">疾病与适应证信息搜集</div><div class="rounded-xl border border-[var(--line)] p-4">医院、科室与专家能力画像</div><div class="rounded-xl border border-[var(--line)] p-4">病例量、样本与数据可得性梳理</div><div class="rounded-xl border border-[var(--line)] p-4">合作优先级与匹配评分框架</div><div class="rounded-xl border border-[var(--line)] p-4">真实世界研究与转化研究框架</div><div class="rounded-xl border border-[var(--line)] p-4">合作路径、风险和下一步建议</div></div>
 </article>
+</div><div class="carousel-slide" data-carousel-slide="3">
 <article class="card reveal p-7 md:p-9" style="transition-delay:.06s">
 <div class="flex items-start justify-between gap-4"><div><span class="service-no display">04</span><h3 class="mt-5 text-2xl font-semibold">项目方案设计与执行支持</h3></div><span class="tag">复杂、多方、跨学科项目</span></div>
 <p class="muted mt-5 leading-7">适用于需要明确技术路线、工作计划、协作分工和交付标准，或涉及医院、实验、数据、算法及供应商多方协作的项目。</p>
 <div class="mt-6 grid gap-3 sm:grid-cols-2 text-sm"><div class="rounded-xl border border-[var(--line)] p-4">目标拆解与技术路线设计</div><div class="rounded-xl border border-[var(--line)] p-4">工作包、预算与里程碑</div><div class="rounded-xl border border-[var(--line)] p-4">数据字典、SOP 与验收标准</div><div class="rounded-xl border border-[var(--line)] p-4">合作单位与供应商任务对接</div><div class="rounded-xl border border-[var(--line)] p-4">阶段汇报、风险与变更管理</div><div class="rounded-xl border border-[var(--line)] p-4">结果整合与最终交付</div></div>
 </article>
+</div>
+    </div>
+  </div>
+  <div class="carousel-footer">
+    <div class="carousel-status" aria-live="polite"></div>
+    <div class="carousel-navigation">
+      <div class="carousel-dots" role="tablist" aria-label="核心服务轮播"></div>
+      <button class="carousel-arrow carousel-prev" type="button" aria-label="上一组">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M14.5 5.5 8 12l6.5 6.5"></path>
+        </svg>
+      </button>
+      <button class="carousel-arrow carousel-next" type="button" aria-label="下一组">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="m9.5 5.5 6.5 6.5-6.5 6.5"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
 </div>
 </div>
 </section>
@@ -1688,12 +2651,20 @@
 <h2 class="section-title display mt-5 font-bold module-title">合作案例</h2>
 <p class="muted mt-6 text-lg leading-8">以下为代表性项目类型展示，均已进行匿名化与脱敏处理，仅用于说明服务范围与交付能力，不展示合作单位名称、患者身份信息或其他敏感信息。结构图展示项目的核心数据流、分析环节与交付路径。</p>
 </div>
-<div class="mt-14 grid gap-6 lg:grid-cols-2">
-<!-- EHRS -->
+<div
+  class="content-carousel mt-14"
+  data-carousel="cases"
+  data-carousel-mode="cases"
+  data-carousel-interval="7000"
+  data-label-zh="合作案例轮播"
+  data-label-en="Case Studies Carousel">
+  <div class="carousel-viewport" tabindex="0" aria-label="合作案例轮播">
+    <div class="carousel-track">
+      <div class="carousel-slide" data-carousel-slide="0">
 <article class="card reveal case-card p-6 md:p-7">
 <div class="mb-4 flex items-center justify-between"><span class="tag">系统开发</span><span class="mini-dot"></span></div>
-<h3 class="text-xl font-semibold">EHRS 临床信息辅助系统</h3>
-<p class="muted mt-4 text-sm leading-6">面向医院临床信息整理与业务协同场景，支持电子病历结构化、字段标准化、权限控制、数据查询与项目级数据提取。</p>
+<h3 class="text-xl font-semibold">EHR 临床数据支持系统</h3>
+<p class="muted mt-4 text-sm leading-6">基于电子健康记录（Electronic Health Record，EHR）及其他临床数据，支持数据结构化、字段标准化、权限控制、数据查询与项目级数据提取。</p>
 <div class="diagram-box">
 <div class="diagram-title">Clinical Data Architecture</div>
 <svg aria-label="EHRS临床信息辅助系统结构图" role="img" viewbox="0 0 640 500" xmlns="http://www.w3.org/2000/svg">
@@ -1740,7 +2711,7 @@
 </div>
 <div class="mt-4 text-xs leading-5 text-[var(--muted)]"><strong class="text-[var(--fg)]">交付重点：</strong>需求梳理、字段映射、数据结构、权限逻辑、流程原型与迭代优化。</div>
 </article>
-<!-- WES -->
+</div><div class="carousel-slide" data-carousel-slide="1">
 <article class="card reveal case-card p-6 md:p-7" style="transition-delay:.04s">
 <div class="mb-4 flex items-center justify-between"><span class="tag">系统开发</span><span class="mini-dot"></span></div>
 <h3 class="text-xl font-semibold">WES 变异分析与报告系统</h3>
@@ -1764,11 +2735,11 @@
 </div>
 <div class="mt-4 text-xs leading-5 text-[var(--muted)]"><strong class="text-[var(--fg)]">交付重点：</strong>质控、比对、变异检测、注释筛选、证据整理和报告模板。</div>
 </article>
-<!-- 16S clinical report -->
+</div><div class="carousel-slide" data-carousel-slide="2">
 <article class="card reveal case-card p-6 md:p-7" style="transition-delay:.08s">
-<div class="mb-4 flex items-center justify-between"><span class="tag">临检报告系统</span><span class="mini-dot"></span></div>
-<h3 class="text-xl font-semibold">16S 临床菌群检测与报告系统</h3>
-<p class="muted mt-4 text-sm leading-6">面向临床样本的16S菌群检测，将测序结果与受检者基础信息结合，形成菌群健康、疾病相关微生物、代谢功能与身体特征相关模块的个体化报告。</p>
+<div class="mb-4 flex items-center justify-between"><span class="tag">微生物分析与报告系统</span><span class="mini-dot"></span></div>
+<h3 class="text-xl font-semibold">16S 菌群分析与报告系统</h3>
+<p class="muted mt-4 text-sm leading-6">面向临床研究、健康管理及科研样本的16S菌群分析，将测序结果与样本及受检者基础信息结合，形成菌群结构、文献关联微生物特征、功能预测与宿主特征关联的结构化报告。报告用于研究和专业辅助解读，不作为独立诊断依据。</p>
 <div class="diagram-box report-diagram">
 <div class="diagram-title">Clinical 16S Report Framework</div>
 <svg aria-label="16S临床菌群检测报告框架图" role="img" viewbox="0 0 640 630" xmlns="http://www.w3.org/2000/svg">
@@ -1781,8 +2752,8 @@
 <rect fill="#FFFFFF" height="76" rx="22" stroke="#D7E7F1" stroke-width="2" width="556" x="42" y="20"></rect>
 <rect fill="url(#microBadge)" height="48" rx="15" width="48" x="60" y="34"></rect>
 <text fill="#FFFFFF" font-size="18" font-weight="700" text-anchor="middle" x="84" y="65">1</text>
-<text fill="#294A54" font-size="21" font-weight="700" x="132" y="52">临床样本与受检者信息</text>
-<text fill="#70868E" font-size="15" x="132" y="76">粪便样本 / 症状与疾病史 / 用药 / 饮食与生活方式</text>
+<text fill="#294A54" font-size="21" font-weight="700" x="132" y="52">样本与基础信息</text>
+<text fill="#70868E" font-size="15" x="132" y="76">样本类型 / 基础资料 / 用药 / 饮食与生活方式</text>
 </g>
 <path d="M320 98V118" stroke="#47A9C9" stroke-linecap="round" stroke-width="5"></path><path d="M307 114L320 132L333 114Z" fill="#47A9C9"></path>
 <!-- analysis -->
@@ -1799,40 +2770,40 @@
 <text fill="#294A54" font-size="18" font-weight="700" x="52" y="280">3　个体化临床菌群报告模块</text>
 <g filter="url(#microShadow)">
 <rect fill="#FFFFFF" height="98" rx="18" stroke="#DCEAF3" width="255" x="50" y="300"></rect>
-<text fill="#29617A" font-size="17" font-weight="700" x="70" y="330">菌群健康与结构</text>
+<text fill="#29617A" font-size="17" font-weight="700" x="70" y="330">菌群结构与组成</text>
 <text fill="#70868E" font-size="13" x="70" y="355">多样性 · 均匀性 · 肠型 · B/F比值</text>
-<text fill="#70868E" font-size="13" x="70" y="378">常见菌群构成与总体健康评分</text>
+<text fill="#70868E" font-size="13" x="70" y="378">主要菌群构成与结构指标汇总</text>
 </g>
 <g filter="url(#microShadow)">
 <rect fill="#FFFFFF" height="98" rx="18" stroke="#DCEAF3" width="255" x="335" y="300"></rect>
-<text fill="#29617A" font-size="17" font-weight="700" x="355" y="330">疾病相关与关键菌群</text>
-<text fill="#70868E" font-size="13" x="355" y="355">有益菌 · 有害菌 · 条件致病菌</text>
-<text fill="#70868E" font-size="13" x="355" y="378">疾病相关微生物及异常丰度提示</text>
+<text fill="#29617A" font-size="17" font-weight="700" x="355" y="330">文献关联与重点菌群</text>
+<text fill="#70868E" font-size="13" x="355" y="355">常见共生菌 · 机会性菌 · 重点关注菌</text>
+<text fill="#70868E" font-size="13" x="355" y="378">文献关联微生物与丰度偏离提示</text>
 </g>
 <g filter="url(#microShadow)">
 <rect fill="#FFFFFF" height="92" rx="18" stroke="#DCEAF3" width="255" x="50" y="420"></rect>
-<text fill="#29617A" font-size="17" font-weight="700" x="70" y="450">代谢与生化功能</text>
+<text fill="#29617A" font-size="17" font-weight="700" x="70" y="450">功能与代谢潜能预测</text>
 <text fill="#70868E" font-size="13" x="70" y="475">维生素/氨基酸合成 · 短链脂肪酸</text>
-<text fill="#70868E" font-size="13" x="70" y="496">生理功能强度与代谢潜能</text>
+<text fill="#70868E" font-size="13" x="70" y="496">功能通路与代谢潜能的预测性指标</text>
 </g>
 <g filter="url(#microShadow)">
 <rect fill="#FFFFFF" height="92" rx="18" stroke="#DCEAF3" width="255" x="335" y="420"></rect>
-<text fill="#29617A" font-size="17" font-weight="700" x="355" y="450">身体特征与器官轴</text>
-<text fill="#70868E" font-size="13" x="355" y="475">健康相关指标 · 肠脑轴 · 肝肠轴</text>
-<text fill="#70868E" font-size="13" x="355" y="496">研究关联菌群及个体特征关联</text>
+<text fill="#29617A" font-size="17" font-weight="700" x="355" y="450">宿主特征与菌群关联</text>
+<text fill="#70868E" font-size="13" x="355" y="475">肠脑轴 · 肝肠轴 · 生活方式关联</text>
+<text fill="#70868E" font-size="13" x="355" y="496">研究文献中的菌群—宿主特征关联</text>
 </g>
 <path d="M320 536V556" stroke="#47A9C9" stroke-linecap="round" stroke-width="5"></path><path d="M307 552L320 570L333 552Z" fill="#47A9C9"></path>
 <!-- output -->
 <g filter="url(#microShadow)">
 <rect fill="url(#microBadge)" height="52" opacity=".96" rx="18" width="556" x="42" y="572"></rect>
-<text fill="#FFFFFF" font-size="18" font-weight="700" text-anchor="middle" x="320" y="595">4　结果总结、风险提示与专业解读建议</text>
-<text fill="#EAFBFF" font-size="12.5" text-anchor="middle" x="320" y="615">审核规则 · 报告生成 · 医生/专业人员复核接口</text>
+<text fill="#FFFFFF" font-size="18" font-weight="700" text-anchor="middle" x="320" y="595">4　结果摘要、关注项与专业解读</text>
+<text fill="#EAFBFF" font-size="12.5" text-anchor="middle" x="320" y="615">审核规则 · 报告生成 · 专业人员复核接口</text>
 </g>
 </svg>
 </div>
-<div class="mt-4 text-xs leading-5 text-[var(--muted)]"><strong class="text-[var(--fg)]">交付重点：</strong>16S分析流程、菌群与身体特征解释模块、临床报告目录、报告生成引擎、审核规则、部署与培训。</div>
+<div class="mt-4 text-xs leading-5 text-[var(--muted)]"><strong class="text-[var(--fg)]">交付重点：</strong>16S分析流程、菌群结构与文献关联解读模块、报告目录、报告生成引擎、审核规则、部署与培训。</div>
 </article>
-<!-- RWD -->
+</div><div class="carousel-slide" data-carousel-slide="3">
 <article class="card reveal case-card p-6 md:p-7" style="transition-delay:.12s">
 <div class="mb-4 flex items-center justify-between"><span class="tag">科研与证据项目</span><span class="mini-dot"></span></div>
 <h3 class="text-xl font-semibold">临床真实世界数据分析</h3>
@@ -1856,11 +2827,11 @@
 </div>
 <div class="mt-4 text-xs leading-5 text-[var(--muted)]"><strong class="text-[var(--fg)]">交付重点：</strong>数据审核、研究设计、统计与因果分析、发表级图表、结果解释和文稿支持。</div>
 </article>
-<!-- Anonymized healthcare AI competitive intelligence -->
-<article class="card reveal case-card case-card-compact p-6 md:p-7" style="transition-delay:.16s">
+</div><div class="carousel-slide" data-carousel-slide="4">
+<article class="card reveal case-card p-6 md:p-7" style="transition-delay:.16s">
 <div class="mb-4 flex items-center justify-between"><span class="tag">产品研究与战略</span><span class="mini-dot"></span></div>
-<h3 class="text-xl font-semibold">医疗 AI 产品竞品与产品决策研究</h3>
-<p class="muted mt-4 text-sm leading-6">围绕医疗 AI Agent 与科研 AI 产品，开展公开资料研究、统一 Case 实测、目标用户访谈、评分体系设计和产品路线研判，形成可复核的竞品与产品决策报告。</p>
+<h3 class="text-xl font-semibold">医疗 AI Agent 与临床科研 AI 产品研究</h3>
+<p class="muted mt-4 text-sm leading-6">围绕医疗 AI Agent 与临床科研 AI 产品，开展公开资料研究、统一 Case 实测、目标用户调研、评分体系设计和产品路线研判，形成可复核的竞品与产品决策报告。</p>
 <div class="diagram-box">
 <div class="diagram-title">Competitive Intelligence &amp; Product Decision Framework</div>
 <svg aria-label="医疗智能体竞品研究与产品决策框架图" role="img" viewbox="0 0 720 620" xmlns="http://www.w3.org/2000/svg">
@@ -1959,11 +2930,11 @@
 </div>
 <div class="mt-4 text-xs leading-5 text-[var(--muted)]"><strong class="text-[var(--fg)]">交付重点：</strong>竞品矩阵、统一Case测试、用户问卷与访谈、分层评分体系、产品定位、功能优先级及阶段落地建议。</div>
 </article>
-<!-- Oncology clinical intelligence system -->
-<article class="card reveal case-card case-card-compact p-6 md:p-7" style="transition-delay:.20s">
+</div><div class="carousel-slide" data-carousel-slide="5">
+<article class="card reveal case-card p-6 md:p-7" style="transition-delay:.20s">
 <div class="mb-4 flex items-center justify-between"><span class="tag">临床智能系统方案</span><span class="mini-dot"></span></div>
 <h3 class="text-xl font-semibold">肿瘤临床智能决策与全周期管理系统</h3>
-<p class="muted mt-4 text-sm leading-6">围绕肿瘤临床辅助决策、风险监测与随访管理，设计多模态数据接入、规则与证据层、报告服务、人工复核、审计治理和分阶段交付框架。</p>
+<p class="muted mt-4 text-sm leading-6">围绕肿瘤辅助决策、疾病风险监管与健康管理，设计灵活多模态接入、规则与知识层、科研增强、报告服务、人工复核、审计治理和分阶段交付框架。</p>
 <div class="diagram-box">
 <div class="diagram-title">Oncology Decision, Governance &amp; Care Architecture</div>
 <svg aria-label="肿瘤临床智能决策疾病监管健康管理系统框架图" role="img" viewbox="0 0 720 690" xmlns="http://www.w3.org/2000/svg">
@@ -2057,6 +3028,25 @@
 <div class="mt-4 text-xs leading-5 text-[var(--muted)]"><strong class="text-[var(--fg)]">交付重点：</strong>产品定义、分层架构、模块需求、对象与数据模型、证据分级、人工复核、审计治理、阶段路线和验收标准。</div>
 </article>
 </div>
+    </div>
+  </div>
+  <div class="carousel-footer">
+    <div class="carousel-status" aria-live="polite"></div>
+    <div class="carousel-navigation">
+      <div class="carousel-dots" role="tablist" aria-label="合作案例轮播"></div>
+      <button class="carousel-arrow carousel-prev" type="button" aria-label="上一组">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M14.5 5.5 8 12l6.5 6.5"></path>
+        </svg>
+      </button>
+      <button class="carousel-arrow carousel-next" type="button" aria-label="下一组">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="m9.5 5.5 6.5 6.5-6.5 6.5"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
 </div>
 </section>
 <section class="py-24 lg:py-32" id="capabilities">
@@ -2088,7 +3078,7 @@
 </section>
 <section class="deliverables-section pt-20 pb-24 lg:pt-28 lg:pb-32">
 <div class="mx-auto max-w-7xl px-6">
-<div class="glass reveal grid gap-10 rounded-[28px] p-8 md:p-12 lg:grid-cols-[.9fr_1.1fr]">
+<div class="glass reveal grid gap-10 rounded-[20px] p-8 md:p-12 lg:grid-cols-[.9fr_1.1fr]">
 <div><span class="eyebrow">Deliverables</span><h2 class="display mt-5 text-3xl font-bold module-title">项目交付内容</h2><p class="muted mt-5 leading-7">具体交付物根据项目类型确定，并在项目确认书或合同中明确文件格式、版本、验收方式和修改范围。</p></div>
 <div class="grid gap-3 sm:grid-cols-2 text-sm"><div class="rounded-xl border border-[var(--line)] p-4">数据审核报告与问题清单</div><div class="rounded-xl border border-[var(--line)] p-4">研究方案 / 系统需求说明书</div><div class="rounded-xl border border-[var(--line)] p-4">清洗后数据库与数据字典</div><div class="rounded-xl border border-[var(--line)] p-4">统计表、生信结果与可复现代码</div><div class="rounded-xl border border-[var(--line)] p-4">发表级 PNG / PDF / SVG 图表</div><div class="rounded-xl border border-[var(--line)] p-4">方法、结果和图注整理</div><div class="rounded-xl border border-[var(--line)] p-4">可部署系统、报告模板与文档</div><div class="rounded-xl border border-[var(--line)] p-4">阶段汇报与项目决策建议</div></div>
 </div>
@@ -2181,7 +3171,7 @@
 
 <section class="pb-24 lg:pb-32" id="contact">
 <div class="mx-auto max-w-7xl px-6">
-<div class="grid overflow-hidden rounded-[30px] border border-[var(--line)] bg-[rgba(255,255,255,.68)] lg:grid-cols-[.88fr_1.12fr] shadow-[0_20px_70px_rgba(22,53,59,.08)]">
+<div class="grid overflow-hidden rounded-[20px] border border-[var(--line)] bg-[rgba(255,255,255,.68)] lg:grid-cols-[.88fr_1.12fr] shadow-[0_20px_70px_rgba(22,53,59,.08)]">
 <div class="bg-[rgba(255,255,255,.58)] p-8 md:p-12 reveal">
 <span class="eyebrow">Contact</span>
 <h2 class="display mt-5 text-3xl font-bold module-title">联系我们</h2>
@@ -2217,7 +3207,7 @@
 </div>
 <form class="grid gap-5" id="projectForm">
 <div class="grid gap-5 sm:grid-cols-2"><label class="text-sm">称呼 / 机构<input class="mt-2" id="name" placeholder="例如：王老师 / 某医院检验科"/></label><label class="text-sm">联系方式<input class="mt-2" id="contactWay" placeholder="邮箱或电话"/></label></div>
-<div class="grid gap-5 sm:grid-cols-2"><label class="text-sm">项目类型<select class="mt-2" id="projectType"><option>科研数据分析与论文支持</option><option>课题 / 基金项目</option><option>临检或生信系统开发</option><option>生物医药证据 / 医院及数据资源研究</option><option>项目方案与执行支持</option><option>其他</option></select></label><label class="text-sm">计划周期<select class="mt-2" id="timeline"><option>待沟通</option><option>1个月内</option><option>1–3个月</option><option>3–6个月</option><option>6个月以上</option></select></label></div>
+<div class="grid gap-5 sm:grid-cols-2"><label class="text-sm">项目类型<select class="mt-2" id="projectType"><option>科研数据分析与论文支持</option><option>课题 / 基金项目</option><option>临检或生信系统开发</option><option>医药信息 / 医院及数据资源研究</option><option>项目方案与执行支持</option><option>其他</option></select></label><label class="text-sm">计划周期<select class="mt-2" id="timeline"><option>待沟通</option><option>1个月内</option><option>1–3个月</option><option>3–6个月</option><option>6个月以上</option></select></label></div>
 <label class="text-sm">项目目标与现有资料<textarea class="mt-2" id="details" placeholder="请简要说明项目背景、数据或材料、样本量、期望交付和关键时间节点。" rows="6"></textarea></label>
 <div class="flex flex-wrap items-center gap-3"><button class="btn-primary" id="sendEmail" type="button">通过邮件提交</button><button class="btn-secondary" id="copyBrief" type="button">复制需求内容</button></div>
 <span aria-live="polite" class="text-sm text-[var(--muted)]" id="copyStatus">项目邮件将发送至 vicky@zhitushengwu.cn</span>
@@ -2292,26 +3282,8 @@
   </script>
 <script>
     (() => {
-      const translations = {"知图生物":"Z2Bio","服务领域":"Services","合作案例":"Case Studies","技术能力":"Capabilities","合作流程":"Process","服务对象":"Clients","关于我们":"About","联系我们":"Contact","联系商务":"Business Inquiry","生命科学数据分析":"Life Sciences Data Analytics","与生物信息技术服务":"and Bioinformatics Services","深圳市知图生物科技有限公司面向医院、高校、科研团队、检验机构及生物医药企业，提供临床数据与多组学分析、科研项目支持、临检生信系统开发、医药信息研究，以及复杂项目的方案设计和执行支持。":"Z2Bio partners with hospitals, universities, research teams, clinical laboratories, and biopharmaceutical companies to deliver clinical and multi-omics analytics, research support, clinical bioinformatics systems, biopharma intelligence, and end-to-end execution of complex programs.","了解核心服务":"Explore Our Services","查看合作案例":"View Case Studies","服务区域":"Service Coverage","中国境内与海外":"China & International","交付语言":"Delivery Languages","中文 / English":"Chinese / English","合作方式":"Engagement Model","专项服务或全流程合作":"Specialist / End-to-End Delivery","主要服务领域":"Core Services","01 科研数据分析":"01 Research Data Analytics","研究设计、数据整理、统计与生信分析、图表制作及论文支持。":"Study design, data curation, statistical and bioinformatics analysis, publication-ready figures, and manuscript support.","02 生信系统开发":"02 Bioinformatics Systems Development","16S、宏基因组、WES/WGS 等分析流程、报告系统与部署。":"Analysis pipelines, reporting systems and deployment for 16S, metagenomics, WES/WGS and related workflows.","03 医药信息研究":"03 Medical Intelligence","围绕疾病领域、医院能力、数据资源和合作目标开展调研与匹配。":"Market, evidence, hospital-capability, and data-resource research aligned with disease areas and partnership objectives.","04 项目方案与执行":"04 Program Design & Execution","技术路线、工作计划、协作管理、阶段汇报与成果交付。":"Technical roadmaps, work plans, stakeholder coordination, milestone reviews, and final delivery.","项目需求":"Project Brief","数据与资料":"Data & Materials","分析或开发":"Analysis / Development","成果交付":"Delivery","临床真实世界数据":"Clinical & Real-World Data","单细胞与空间组学":"Single-Cell & Spatial Omics","16S / 宏基因组":"16S / Metagenomics","统计建模与因果推断":"Statistical Modeling & Causal Inference","软件系统与报告引擎":"Software Platforms & Reporting Engines","核心服务":"Core Services","围绕科研、临床检验和生物医药项目的实际需求，提供数据分析、系统开发、信息研究和项目执行服务。服务范围与交付内容根据项目资料和目标确定。":"We provide analytics, system development, evidence and market intelligence, and program execution for research, clinical laboratory, and biopharma projects. Scope and deliverables are defined against the available data, operational context, and project objectives.","科研数据分析与论文支持":"Research Analytics & Publication Support","医院 / 高校 / 科研团队":"Hospitals / Universities / Research Teams","面向临床真实数据、患者队列、公开数据库和多组学数据项目，提供研究设计、数据分析、成果整理和论文阶段支持。":"Study design, analytics, evidence synthesis, and publication-stage support for clinical datasets, patient cohorts, public databases, and multi-omics projects.","课题设计、数据可行性审核":"Study design and data feasibility review","数据清洗、统计与生信分析":"Data cleaning, statistics and bioinformatics","基金标书与项目申报支持":"Grant and proposal support","发表级图表、结果与方法整理":"Publication-ready figures, results, and methods","论文逻辑、返修与补充分析":"Manuscript structure, revision, and additional analyses","中英文材料整理与海外项目协作":"Chinese/English materials and international collaboration","临检与生信分析系统开发":"Clinical Laboratory Bioinformatics Systems","检验机构 / 医院 / IVD / 测序公司":"Clinical Labs / Hospitals / IVD / Sequencing Providers","根据业务流程、样例数据和报告需求，开发可运行、可追踪和可维护的分析流程及报告系统，适用于测序临检和科研生产化场景。":"We design and build operational, traceable, and maintainable analysis pipelines and reporting systems based on laboratory workflows, representative datasets, and reporting requirements for clinical testing and production-scale research.","16S 与宏基因组分析系统":"16S and metagenomics systems","WES / WGS / RNA-seq 流程":"WES / WGS / RNA-seq pipelines","自动质控、任务调度与日志":"Automated QC, orchestration and logging","报告模板与结果解释引擎":"Report templates and interpretation engines","本地化、私有化或云端部署":"On-premises, private-cloud, or public-cloud deployment","验证方案、文档、培训与迭代":"Validation, documentation, training and iteration","医药信息研究与资源匹配":"Biopharma Intelligence & Resource Matching","药企 / Biotech / CRO / 咨询机构":"Pharma / Biotech / CRO / Consulting","围绕疾病领域、研发阶段和证据需求，开展行业信息搜集、医院及科室调研、数据资源梳理和合作对象初筛。":"Market and evidence intelligence, hospital and department research, data-resource mapping, and partner screening across disease areas and development stages.","疾病与适应证信息搜集":"Disease and indication intelligence","医院、科室与专家能力画像":"Hospital, department, and expert capability profiles","病例量、样本与数据可得性梳理":"Patient volume, biospecimen availability, and data feasibility","合作优先级与匹配评分框架":"Partner prioritization and scoring","真实世界研究与转化研究框架":"Real-world evidence and translational research frameworks","合作路径、风险和下一步建议":"Partnership pathway, risks and next steps","项目方案设计与执行支持":"Program Design & Execution Support","复杂、多方、跨学科项目":"Complex, Multi-Stakeholder Programs","适用于需要明确技术路线、工作计划、协作分工和交付标准，或涉及医院、实验、数据、算法及供应商多方协作的项目。":"For programs requiring a defined technical roadmap, work plan, responsibilities, and acceptance criteria, including multi-stakeholder collaboration across hospitals, laboratories, data teams, algorithms, and vendors.","目标拆解与技术路线设计":"Objective definition and technical roadmap","工作包、预算与里程碑":"Work packages, budget and milestones","数据字典、SOP 与验收标准":"Data dictionaries, SOPs and acceptance criteria","合作单位与供应商任务对接":"Partner and vendor coordination","阶段汇报、风险与变更管理":"Milestone reporting, risk and change management","结果整合与最终交付":"Integrated results and final delivery","以下为代表性项目类型展示，均已进行匿名化与脱敏处理，仅用于说明服务范围与交付能力，不展示合作单位名称、患者身份信息或其他敏感信息。结构图展示项目的核心数据流、分析环节与交付路径。":"The following anonymized case types illustrate our service scope and delivery capabilities. No partner names, directly identifiable patient information, or other sensitive details are shown. The diagrams summarize core data flows, analytical stages, governance controls, and delivery pathways.","系统开发":"System Development","EHRS 临床信息辅助系统":"EHRS Clinical Information Support System","面向医院临床信息整理与业务协同场景，支持电子病历结构化、字段标准化、权限控制、数据查询与项目级数据提取。":"Designed for clinical data management and cross-functional collaboration, supporting EHR structuring, field standardization, access control, data querying, and project-level extraction.","多源临床数据":"Multi-Source Clinical Data","EHR / LIS / 病例表单 / 随访与项目资料":"EHR / LIS / Case Forms / Follow-up & Project Data","脱敏、标准化与质量审核":"De-identification, Standardization & QC","去标识化 / 字段映射 / 单位统一 / 逻辑校验":"De-identification / Field Mapping / Unit Harmonization / Consistency Checks","临床数据底座":"Clinical Data Foundation","数据库 / 数据字典 / 权限控制 / 操作审计":"Database / Data Dictionary / Access Control / Audit Trail","查询、科研与项目应用":"Research & Program Applications","检索 / 数据提取 / 队列构建 / 项目协同":"Search / Extraction / Cohort Building / Collaboration","交付重点：":"Key Deliverables:","需求梳理、字段映射、数据结构、权限逻辑、流程原型与迭代优化。":"Requirements, field mapping, data architecture, access logic, workflow prototype and iterative optimization.","WES 变异分析与报告系统":"WES Variant Analysis & Reporting System","围绕全外显子测序数据处理、变异检测、注释、筛选与结果解释，构建自动化分析流程和标准化报告模块。":"An automated workflow and standardized reporting module for whole-exome sequencing data, covering quality control, alignment, variant calling, annotation, prioritization, and interpretation.","测序数据与样本信息":"Sequencing & Sample Data","FASTQ / 样本信息 / 家系或临床表型":"FASTQ / Sample Metadata / Family or Clinical Phenotype","质控、比对与变异检测":"QC, Alignment & Variant Calling","QC / Alignment / SNV-Indel / CNV（按方案）":"QC / Alignment / SNV-Indel / CNV (as scoped)","注释、筛选与证据整合":"Annotation, Prioritization & Evidence","频率 / 功能 / 疾病数据库 / 表型与文献证据":"Frequency / Function / Disease Databases / Phenotype & Literature","审核、解释与报告交付":"Review, Interpretation & Reporting","候选变异 / 证据说明 / 图表 / 标准化报告":"Candidate Variants / Evidence / Figures / Standardized Report","质控、比对、变异检测、注释筛选、证据整理和报告模板。":"QC, alignment, variant calling, annotation, prioritization, evidence synthesis and report templates.","临检报告系统":"Clinical Reporting System","16S 临床菌群检测与报告系统":"16S Clinical Microbiome Analysis & Reporting System","面向临床样本的16S菌群检测，将测序结果与受检者基础信息结合，形成菌群健康、疾病相关微生物、代谢功能与身体特征相关模块的个体化报告。":"Designed for clinical samples, this 16S workflow combines sequencing-derived microbial profiles with patient metadata to generate individualized report modules covering microbiome structure, disease-associated microbial signatures, inferred functional potential, and host phenotype-related indicators.","临床样本与受检者信息":"Clinical Sample & Patient Metadata","粪便样本 / 症状与疾病史 / 用药 / 饮食与生活方式":"Stool Sample / Symptoms & History / Medication / Diet & Lifestyle","16S测序、质控与菌群解析":"16S Sequencing, QC & Microbiome Profiling","序列质控 / ASV或OTU / 分类注释 / 丰度与多样性分析":"Sequence QC / ASV or OTU Processing / Taxonomic Annotation / Abundance & Diversity","3 个体化临床菌群报告模块":"3 Personalized Clinical Microbiome Report Modules","菌群健康与结构":"Microbiome Health & Structure","多样性 · 均匀性 · 肠型 · B/F比值":"Diversity · Evenness · Enterotype · B/F Ratio","常见菌群构成与总体健康评分":"Common taxa composition and overall health score","疾病相关与关键菌群":"Disease-Associated Microbial Signatures","有益菌 · 有害菌 · 条件致病菌":"Beneficial · Potentially Harmful · Opportunistic Taxa","疾病相关微生物及异常丰度提示":"Disease-associated signatures and abnormal-abundance flags","代谢与生化功能":"Inferred Metabolic & Biochemical Potential","维生素/氨基酸合成 · 短链脂肪酸":"Predicted Vitamin/Amino-Acid Pathways · Short-Chain Fatty Acids","生理功能强度与代谢潜能":"Inferred functional potential and pathway-level indicators","身体特征与器官轴":"Host Features & Gut-Organ Axes","疾病抵抗力 · 肠脑轴 · 肝肠轴":"Host Resilience Indicators · Gut-Brain Axis · Gut-Liver Axis","长寿相关菌及个体特征关联":"Longevity-associated taxa and host-phenotype associations","4 结果总结、风险提示与个体化建议":"4 Summary, Interpretation Flags & Personalized Guidance","审核规则 · 报告生成 · 医生/专业人员解读接口":"Review Rules · Report Generation · Clinician/Professional Review Interface","16S分析流程、菌群与身体特征解释模块、临床报告目录、报告生成引擎、审核规则、部署与培训。":"16S analysis workflow, microbiome interpretation modules, report architecture, reporting engine, review rules, deployment, and training.","科研与证据项目":"Research & Evidence Program","临床真实世界数据分析":"Clinical & Real-World Data Analytics","基于脱敏后的患者级数据开展队列构建、变量清洗、结局定义、统计建模、证据生成、图表制作和研究成果整理。":"Cohort construction, variable curation, endpoint definition, statistical modeling, evidence generation, visualization, and research deliverables using de-identified patient-level data.","研究问题与数据安全":"Research Objectives & Data Governance","研究目标 / 数据来源 / 脱敏 / 合规与访问边界":"Objectives / Data Sources / De-identification / Governance & Access Controls","队列、变量与结局定义":"Cohort, Variables & Endpoints","入排标准 / 暴露与结局 / 时间零点 / 数据字典":"Eligibility / Exposure & Outcome / Time Zero / Data Dictionary","统计建模与稳健性验证":"Statistical Modeling & Robustness Assessment","描述 / 生存 / 纵向 / PS / 因果 / 亚组与敏感性分析":"Descriptive / Survival / Longitudinal / PS / Causal / Subgroup & Sensitivity","证据、图表与研究交付":"Evidence, Figures & Research Deliverables","统计表 / 发表级图表 / 解释 / 报告或论文支持":"Statistical Tables / Publication Figures / Interpretation / Report or Manuscript","数据审核、研究设计、统计与因果分析、发表级图表、结果解释和文稿支持。":"Data review, study design, statistical and causal analysis, publication-grade figures, interpretation and manuscript support.","产品研究与战略":"Product Research & Strategy","医疗智能体竞品与产品决策研究":"Healthcare AI Competitive Intelligence & Product Strategy","围绕医生智能体与科研AI产品，开展公开资料研究、统一Case实测、目标用户调研、评分体系设计和产品路线研判，形成可复核的竞品与产品决策报告。":"A structured competitive and product strategy study covering public-source intelligence, standardized case testing, target-user research, evaluation methodology and product roadmap decisions for healthcare and research AI.","市场与产品定位":"Market & Product Positioning","• 医生、证据、科研与院内入口":"• Clinical, evidence, research and hospital workflow entry points","• 功能、工作流与中国适配":"• Capabilities, workflows and China localization","• 竞品A–E与国际标杆":"• Anonymized competitors A–E and global benchmarks","公开资料 + 产品实测":"Public Sources + Product Testing","统一Case实测":"Standardized Case-Based Evaluation","• 临床循证与药物安全":"• Clinical evidence and medication safety","• 科研设计与统计建议":"• Research design and statistical guidance","• 引用真实性与论断支持":"• Citation validity and claim support","同题、同版本、同记录模板":"Same Task · Version · Template","目标用户研究":"Target-User Research","• 用户角色与真实任务":"• User roles and real-world tasks","• AI使用、信任与边界":"• AI usage, trust and boundaries","• 科研需求、付费与采购":"• Research needs, payment and procurement","问卷 + 访谈 + 证据清洗":"Survey + Interviews + Data-Quality Controls","分层评分，不用单一“万能总分”":"Layered Evaluation—Not a Single Composite Score","医学/科研可信度":"Clinical & Research Reliability","任务理解 · 正确性 · 证据 · 安全 · 完整性":"Understanding · Accuracy · Evidence · Safety","产品体验":"Product Usability","准入 · 稳定 · 引用 · 全文 · 跨端":"Access · Stability · Citations · Full Text · Cross-Platform","红线":"Safety Gate","错误封顶":"Critical-Error Ceiling","产品定位":"Positioning","目标入口与差异化":"Target entry point and differentiation","能力优先级":"Capability Priorities","P0 / P1 / P2 路线":"P0 / P1 / P2 Roadmap","落地计划":"Implementation","90天样板与工作流":"90-Day Pilot & Workflow","验收指标":"Acceptance Metrics","可信度 · 效率 · 使用率":"Reliability · Efficiency · Adoption","竞品矩阵、统一Case测试、用户问卷与访谈、分层评分体系、产品定位、功能优先级及阶段落地建议。":"Competitive landscape, standardized case-based evaluation, user surveys and interviews, layered scoring, product positioning, capability priorities, and phased implementation recommendations.","临床智能系统方案":"Clinical Intelligence System","肿瘤临床智能决策与全周期管理系统":"Oncology Clinical Decision Support & Longitudinal Care Management System","围绕肿瘤辅助决策、疾病风险监管与健康管理，设计灵活多模态接入、规则与知识层、科研增强、报告服务、人工复核、审计治理和分阶段交付框架。":"A phased architecture for oncology decision support, risk surveillance, and longitudinal care management, integrating flexible multimodal intake, deterministic rules, evidence mapping, research augmentation, human review, service delivery, and audit governance.","结构化变异":"Structured Variants","检测报告":"Test Reports","病理与图像":"Pathology & Imaging","组织学 / CT / MRI":"Histology / CT / MRI","检验指标":"Laboratory Results","LIS / 动态监测":"LIS / Longitudinal Monitoring","病例与治疗信息":"Case & Treatment Data","病史 / 分期 / 治疗线":"History / Stage / Line of Therapy","多模态接入与病例对象层":"Multimodal Intake & Clinical Object Layer","标准化处理 → Clinical Objects → Case Bundle → 来源与版本追踪":"Standardization → Clinical Objects → Case Bundle → Provenance & Versioning","临床决策、知识映射与人工复核层":"Clinical Decision Support, Knowledge Mapping & Human Review","规则引擎":"Rule Engine","缺失/禁忌/路径/MDT触发":"Missing Data / Contraindications / Pathways / MDT Triggers","知识与证据分级":"Knowledge & Evidence Grading","药物·突变·疾病·指南 L1/L2/L3":"Drug · Variant · Disease · Guideline Evidence L1/L2/L3","病例编排与复核":"Case Orchestration & Review","科研增强与候选知识生产":"Research Augmentation & Candidate Knowledge","研究型机制解释 · RAG/LLM · 条件触发模型 · 强制人工复核":"Mechanistic Research · RAG/LLM · Conditional Models · Mandatory Review","诊断与分型":"Diagnosis & Classification","病例摘要 · 分子发现":"Case Summary · Molecular Findings","治疗与用药辅助":"Treatment Decision Support","推荐 · 规避 · 耐药路径":"Recommendations · Contraindications · Resistance Pathways","风险评估":"Risk Assessment","复发 · 毒性 · 动态监测":"Recurrence · Toxicity · Longitudinal Monitoring","健康干预与随访":"Health Management & Follow-up","复查 · 预约 · 长期管理":"Reassessment · Referral · Longitudinal Management","LAYER 4 评估中心 · 版本注册 · 审计日志 · PCCP变更控制 · 经验/相似病例记忆":"LAYER 4 · Evaluation · Versioning · Audit · PCCP Control · Experience Memory","产品定义、分层架构、模块需求、对象与数据模型、证据分级、人工复核、审计治理、阶段路线和验收标准。":"Product definition, layered architecture, module requirements, object and data models, evidence grading, human review, audit governance, phased roadmap and acceptance criteria.","数据分析与技术能力":"Data & Technology","项目启动前对数据质量、变量定义、样本量和研究目标进行审核，并据此制定分析方案、开发路线和交付标准。":"Before launch, we assess data quality, variable definitions, sample size, and research objectives to establish the analytical plan, development roadmap, and acceptance criteria.","涉及患者数据、临床诊断、伦理审查或监管用途的项目，将在合作前根据实际需求确认数据安全、伦理和相关资质要求。":"Projects involving patient data, clinical decision support, ethics review, or regulated use are initiated only after data-security, ethics, and responsible-party requirements have been confirmed.","临床与真实世界数据":"Clinical & Real-World Data","队列构建、病例与样本对齐、缺失与异常处理、生存分析、纵向数据、倾向评分、因果推断、预测模型与验证。":"Cohort construction, patient–sample linkage, missing and anomalous data handling, survival and longitudinal analysis, propensity methods, causal inference, predictive modeling, and validation.","基因组与转录组":"Genomics & Transcriptomics","WES、WGS、panel、RNA-seq、变异与表达分析、通路与网络、外部队列验证、临床表型联合分析。":"WES, WGS, panel sequencing, RNA-seq, variant and expression analysis, pathway and network analysis, external-cohort validation, and integration with clinical phenotypes.","细胞注释、亚群与状态、差异与富集、轨迹、细胞通讯、调控网络、空间定位、多模态整合。":"Cell annotation, subpopulations and states, differential and enrichment analysis, trajectories, cell communication, regulatory networks, spatial localization and multimodal integration.","微生物组与病原数据":"Microbiome & Pathogen Data","16S、宏基因组、mNGS 数据质控、物种与功能分析、临床关联、风险模型和可解释报告。":"Quality control, taxonomic and functional profiling, clinical-association analysis, risk modeling, and interpretable reporting for 16S, metagenomic, and mNGS data.","多组学与机制整合":"Multi-Omics & Mechanistic Integration","临床、基因、表达、蛋白、代谢、微生物等多层数据的联合建模、机制链构建与稳健性验证。":"Joint modeling, mechanistic-pathway construction, and robustness assessment across clinical, genomic, transcriptomic, proteomic, metabolic, and microbiome data layers.","软件工程与部署":"Software Engineering & Deployment","流程容器化、任务管理、数据库、前后端、权限审计、报告生成、版本管理、部署与运维文档。":"Workflow containerization, job orchestration, databases, front-end and back-end development, access control and audit logging, report generation, version management, deployment, and operations documentation.","标准合作流程":"Collaboration Process","根据项目类型采用分阶段沟通和交付方式，确保需求、范围、进度及验收标准清晰一致。":"We use a phased engagement and delivery model to align scope, responsibilities, timelines, and acceptance criteria.","需求澄清与可行性预评估":"Requirements Clarification & Feasibility Review","了解项目背景、目标、数据来源、样本量、计划周期、预算范围和预期成果。":"Clarify background, objectives, data sources, sample size, timeline, budget range and expected outcomes.","数据审核与项目边界确认":"Data Review & Scope Definition","审核数据完整性、变量定义、样本对应关系、伦理与隐私条件，形成问题清单及补充资料要求。":"Review data completeness, variable definitions, sample linkage, ethics, and privacy conditions; produce an issue log and supplementary-data request.","方案、报价与里程碑":"Proposal, Pricing & Milestones","形成项目方案、工作内容、报价、计划周期、阶段交付和修改范围。":"Define the project plan, work scope, pricing, schedule, phased deliverables and revision boundaries.","分析 / 开发与阶段汇报":"Analysis / Development & Milestone Reviews","按照既定计划开展分析或开发工作，定期同步中间结果、问题和下一阶段安排。":"Execute the agreed plan and regularly communicate interim results, issues and next-stage actions.","质量审核、交付与后续沟通":"Quality Review, Delivery & Post-Delivery Support","完成结果审核、文件整理、系统交付或汇报说明，并根据约定开展必要的解释、培训或迭代。":"Complete quality review, documentation, system or report delivery, and the agreed interpretation, training, or iteration.","我们根据不同机构的资料基础、项目目标和内部能力，提供相应的专项服务或全流程合作。":"We tailor specialist or end-to-end engagements to each organization’s data readiness, objectives, and internal capabilities.","医院与临床科室":"Hospitals & Clinical Departments","从病例数据、样本和临床问题出发，搭建研究队列、分析路径和成果交付。":"Build cohorts, analytical pathways and deliverables from clinical questions, patient data and samples.","常见需求：已有数据分析、临床课题设计":"Typical needs: analysis of existing datasets and clinical study design","高校与科研团队":"Universities & Research Teams","支持基金、课题设计、多组学分析、发表图表、论文与返修。":"Support for grants, study design, multi-omics analysis, publication figures, manuscripts and revisions.","常见需求：基金课题、多组学分析、论文返修":"Typical needs: grants, multi-omics and manuscript revision","检验与测序机构":"Diagnostic Laboratories & Sequencing Providers","将现有人工流程升级为标准化分析、报告和部署系统。":"Upgrade manual workflows into standardized analysis, reporting and deployment systems.","常见需求：分析流程、报告系统、私有化部署":"Typical needs: analysis pipelines, reporting systems, and on-premises deployment","药企与生物技术企业":"Pharmaceutical & Biotechnology Companies","围绕目标适应证、研发与上市阶段、证据需求和合作资源，提供行业调研、医院与数据资源匹配、真实世界研究设计与数据分析、项目框架和执行支持。":"Across discovery, clinical development, launch, and post-marketing stages, we provide market and evidence intelligence, hospital and data-resource matching, real-world study design and analytics, program architecture, and execution support.","常见需求：行业调研、资源匹配、不同阶段真实世界数据分析、项目执行":"Typical needs: market intelligence, resource matching, lifecycle-specific RWE/RWD analytics, and program execution","客户评价":"Client Feedback","来自临床科研、多组学分析与系统开发项目的匿名合作反馈。":"Anonymized feedback from clinical research, multi-omics and system development engagements.","临":"C","某三甲医院项目负责人":"Project Lead, Tertiary Hospital","临床真实世界数据项目":"Clinical Real-World Data Program","项目启动前先完成数据结构、变量口径和问题清单梳理，阶段汇报清楚，便于科室内部持续确认和推进后续工作。":"The team clarified the data structure, variable definitions and open questions before launch. Milestone reporting was clear and supported internal alignment and continued execution.","研":"R","某高校课题组负责人":"Research Group Lead, University","多组学科研与论文支持":"Multi-Omics Research & Publication Support","分析方案能够围绕研究问题及时调整，图表、方法和结果整理较完整，返修阶段的沟通与补充分析也比较及时。":"The analytical plan adapted well to the research question. Figures, methods and results were well organized, with timely communication and additional analyses during revision.","企":"B","某生物技术企业研发负责人":"R&D Lead, Biotechnology Company","分析系统与项目执行":"Analytics System & Program Delivery","从需求拆解、流程设计到交付文档都有明确节点，减少了研发、数据和业务团队之间的反复沟通。":"Clear milestones from requirement decomposition and workflow design through delivery documentation reduced repeated communication across R&D, data and business teams.","以上为匿名化展示文案；正式上线前应使用已取得客户授权的真实评价替换或确认。":"These are anonymized display statements. Before public launch, replace or confirm them with authorized client feedback.","关于知图生物":"About Zhitu","深圳市知图生物科技有限公司专注于生命科学数据分析与生物信息技术服务。公司围绕临床科研、基因测序与多组学数据、微生物组分析、临检系统开发及生物医药项目需求，为客户提供技术方案、分析实施、系统开发和项目管理支持。":"Zero to Biosciences (Z2Bio) specializes in life sciences data analytics, bioinformatics engineering, and program delivery. We support clinical research, sequencing and multi-omics, microbiome analysis, clinical bioinformatics systems, and biopharma programs through solution design, analytical execution, software development, and program management.","我们重视研究问题与数据基础的匹配，项目开始前明确工作范围、交付内容和责任边界，并通过阶段沟通保证项目进度和结果质量。公司位于深圳，可支持中国境内及海外项目合作。":"We align research questions and business objectives with the available data and operational context, define scope, deliverables, and responsibilities before launch, and maintain quality through milestone-based communication. Based in Shenzhen, we support projects in China and internationally.","问题导向":"Problem-Led","从临床、科研或业务问题出发设计分析与开发方案。":"Design analytical and development solutions around clearly defined clinical, research, or business questions.","分阶段交付":"Phased Delivery","通过数据审核、方案确认、阶段汇报和最终验收推进项目。":"Advance projects through data review, scope confirmation, milestone reporting and final acceptance.","可复现与可维护":"Reproducible & Maintainable","根据项目约定提供分析记录、代码、文档或系统维护资料。":"Provide analysis records, code, documentation or maintenance materials as agreed.","数据安全":"Data Security","对涉及患者和机构的数据明确传输、访问、存储与使用边界。":"Define transmission, access, storage and use boundaries for patient and institutional data.","项目交付内容":"Project Deliverables","具体交付物根据项目类型确定，并在项目确认书或合同中明确文件格式、版本、验收方式和修改范围。":"Deliverables are tailored to the project and specified in the project confirmation or contract, including file formats, versioning, acceptance criteria, and revision scope.","数据审核报告与问题清单":"Data review report and issue log","研究方案 / 系统需求说明书":"Study protocol / System requirements specification","清洗后数据库与数据字典":"Curated database and data dictionary","统计表、生信结果与可复现代码":"Statistical outputs, bioinformatics results, and reproducible code","发表级 PNG / PDF / SVG 图表":"Publication-ready PNG / PDF / SVG figures","方法、结果和图注整理":"Methods, results and figure legends","可部署系统、报告模板与文档":"Deployable software, report templates, and technical documentation","阶段汇报与项目决策建议":"Milestone reports and decision recommendations","欢迎医院、高校、科研团队、检验机构及生物医药企业就数据分析、科研项目、系统开发和项目合作进行咨询。":"We welcome inquiries from hospitals, universities, research teams, clinical laboratories, and biopharmaceutical companies regarding analytics, research programs, system development, and partnership opportunities.","项目咨询与技术合作":"Project & Technical Collaboration","商务合作与报价":"Business & Pricing","公司信息与一般咨询":"Corporate & General Inquiries","联系电话":"Telephone","公司所在地：深圳":"Location: Shenzhen, China","服务范围：中国境内及海外项目":"Coverage: China and international projects","请勿通过普通邮件直接发送包含姓名、身份证号、住院号或其他可识别患者身份的信息。患者级数据应在签署保密及数据处理约定后，通过双方确认的安全方式传输。":"Do not send names, government identification numbers, medical record numbers, or other directly identifiable patient information by standard email. Patient-level data should be transferred only through an agreed secure channel after confidentiality and data-processing terms are in place.","填写以下信息后，可通过默认邮件客户端发送至项目联系人，也可以复制内容后通过其他方式沟通。":"Complete the form to open your default email client, or copy the content for another communication channel.","称呼 / 机构":"Name / Organization","联系方式":"Contact Details","项目类型":"Project Type","课题 / 基金项目":"Study / Grant Proposal","临检或生信系统开发":"Clinical Testing / Bioinformatics System","医药信息 / 医院及数据资源研究":"Medical Intelligence / Hospital & Data Research","项目方案与执行支持":"Program Design & Execution","其他":"Other","计划周期":"Expected Timeline","待沟通":"To Be Discussed","1个月内":"Within 1 Month","1–3个月":"1–3 Months","3–6个月":"3–6 Months","6个月以上":"More Than 6 Months","项目目标与现有资料":"Objectives & Available Materials","通过邮件提交":"Submit by Email","复制需求内容":"Copy Project Brief","项目邮件将发送至 vicky@zhitushengwu.cn":"The inquiry email will be addressed to vicky@zhitushengwu.cn","深圳市知图生物科技有限公司提供生命科学数据分析、生物信息技术、临检系统开发及生物医药项目支持服务。":"Z2Bio provides life science data analytics, bioinformatics technology, clinical testing systems and biopharma program support.","深圳｜中国境内及海外项目":"Shenzhen, China | China & International Projects","网站导航":"Navigation","© 2026 深圳市知图生物科技有限公司 | 服务范围、数据处理、知识产权及交付标准以双方正式合同为准":"© 2026 Shenzhen Z2Bio Co., Ltd. | Service scope, data processing, intellectual property and delivery standards are governed by the executed agreement.","知图生物｜生命科学数据分析与生物信息技术服务":"Z2Bio | Life Sciences Data Analytics & Bioinformatics Services","3　个体化临床菌群报告模块":"3 Personalized Clinical Microbiome Modules","4　结果总结、风险提示与个体化建议":"4 Summary, Risk Flags & Personalized Guidance","LAYER 4　评估中心 · 版本注册 · 审计日志 · PCCP变更控制 · 经验/相似病例记忆":"LAYER 4  Evaluation Hub · Version Registry · Audit Trail · PCCP Change Control · Experience/Similar-Case Memory","© 2026 深圳市知图生物科技有限公司  |  服务范围、数据处理、知识产权及交付标准以双方正式合同为准":"© 2026 Shenzhen Z2Bio Co., Ltd. | Service scope, data processing, intellectual property and delivery standards are governed by the executed agreement.","围绕医疗智能体与科研AI产品，开展公开资料研究、统一Case实测、目标用户调研、评分体系设计和产品路线研判，形成可复核的竞品与产品决策报告。":"A structured competitive-intelligence and product-strategy study for healthcare AI assistants, combining public-source research, standardized case-based evaluations, target-user research, scoring-framework design, and product-roadmap recommendations.","医生、证据、科研与院内入口":"Clinical · Evidence · Research · Hospital Workflows","功能、工作流与中国适配":"Capabilities · Workflow · China Fit","临床循证与药物安全":"Clinical Evidence Retrieval & Medication Safety","科研设计与统计建议":"Research Design & Statistical Guidance","引用真实性与论断支持":"Citation Validity & Claim-Evidence Alignment","AI使用、信任与边界":"AI Adoption · Trust · Boundaries","科研需求、付费与采购":"Research Needs · Payment · Procurement","ZHITU BIOSCIENCES":"ZERO TO BIOSCIENCES","用户角色与真实任务":"User Roles · Real-World Tasks"};
-      Object.assign(translations, {
-        "深圳市知图生物科技有限公司面向医院、高校、科研团队、检验机构及生物医药企业，提供临床数据与多组学分析、科研项目支持、临检生信系统开发、生物医药证据与资源研究，以及复杂项目的方案设计和执行支持。": "Z2Bio partners with hospitals, universities, research teams, clinical laboratories, and biopharmaceutical companies to deliver clinical and multi-omics analytics, research support, clinical bioinformatics systems, biopharma evidence and resource research, and execution support for complex programs.",
-        "03 证据与资源研究": "03 Evidence & Resource Research",
-        "围绕疾病领域、证据需求、医院能力和数据资源开展研究与匹配。": "Research and matching across disease areas, evidence needs, hospital capabilities, and data resources.",
-        "生物医药证据与资源研究": "Biopharma Evidence & Resource Research",
-        "医疗 AI 产品竞品与产品决策研究": "Healthcare AI Product Intelligence & Strategy",
-        "围绕医疗 AI Agent 与科研 AI 产品，开展公开资料研究、统一 Case 实测、目标用户访谈、评分体系设计和产品路线研判，形成可复核的竞品与产品决策报告。": "Competitive and product strategy research for healthcare AI agents and research AI products, covering public-source review, standardized case testing, user interviews, scoring-framework design, and roadmap recommendations.",
-        "围绕肿瘤临床辅助决策、风险监测与随访管理，设计多模态数据接入、规则与证据层、报告服务、人工复核、审计治理和分阶段交付框架。": "A phased architecture for oncology clinical decision support, risk monitoring, and follow-up management, covering multimodal data intake, rules and evidence layers, reporting services, human review, audit governance, and staged delivery.",
-        "健康相关指标 · 肠脑轴 · 肝肠轴": "Health-Related Indicators · Gut-Brain Axis · Gut-Liver Axis",
-        "研究关联菌群及个体特征关联": "Research-Linked Taxa and Host-Feature Associations",
-        "4　结果总结、风险提示与专业解读建议": "4 Summary, Interpretation Flags & Professional Review Notes",
-        "审核规则 · 报告生成 · 医生/专业人员复核接口": "Review Rules · Report Generation · Clinician/Professional Review Interface",
-        "生物医药证据 / 医院及数据资源研究": "Biopharma Evidence / Hospital & Data-Resource Research",
-        "临检或生信系统开发": "Clinical Laboratory / Bioinformatics Systems",
-        "药企与生物技术企业": "Pharma & Biotech Companies",
-        "围绕目标适应证、研发与上市阶段、证据需求和合作资源，提供行业调研、医院与数据资源匹配、真实世界研究设计与数据分析、项目框架和执行支持。": "Support for target indications and product stages through market and evidence research, hospital and data-resource matching, real-world study design, analytics, and program execution.",
-        "常见需求：行业调研、资源匹配、不同阶段真实世界数据分析、项目执行": "Typical needs: market research, resource matching, RWE/RWD analytics, and program execution"
-      });
-      const attributeTranslations = {"知图生物首页":"Z2Bio Home","打开导航菜单":"Open Navigation Menu","医疗智能体竞品研究与产品决策框架图":"Healthcare AI Competitive Intelligence and Product Strategy Framework","知图生物Logo":"Z2Bio Logo","例如：王老师 / 某医院检验科":"e.g., Dr. Wang / Hospital Laboratory","邮箱或电话":"Email or telephone","请简要说明项目背景、数据或材料、样本量、期望交付和关键时间节点。":"Briefly describe the project background, available data or materials, sample size, expected deliverables, and key milestones.","16S临床菌群检测报告框架图":"16S Clinical Microbiome Analysis and Reporting Framework","EHRS临床信息辅助系统结构图":"EHRS Clinical Information Support System Architecture","WES变异分析与报告系统结构图":"WES Variant Analysis and Reporting System Architecture","临床真实世界数据分析结构图":"Clinical and Real-World Data Analytics Framework","五星评价":"Five-star rating","肿瘤临床智能决策疾病监管健康管理系统框架图":"Oncology Clinical Decision Support, Risk Surveillance, and Longitudinal Care Architecture"};
+      const translations = {"知图生物":"Z2Bio","服务领域":"Services","合作案例":"Case Studies","技术能力":"Capabilities","合作流程":"Process","服务对象":"Clients","关于我们":"About","联系我们":"Contact","联系商务":"Business Inquiry","生命科学数据分析":"Life Sciences Data Analytics","与生物信息技术服务":"and Bioinformatics Services","深圳市知图生物科技有限公司面向医院、高校、科研团队、检验机构及生物医药企业，提供临床数据与多组学分析、科研项目支持、临床实验室与生物信息系统开发、生物医药证据与资源研究，以及复杂项目的方案设计和执行支持。":"Z2Bio partners with hospitals, universities, research teams, clinical laboratories, and biopharmaceutical companies to deliver clinical and multi-omics analytics, research support, clinical laboratory and bioinformatics systems, biopharma evidence and resource intelligence, and end-to-end execution of complex programs.","了解核心服务":"Explore Our Services","查看合作案例":"View Case Studies","服务区域":"Service Coverage","中国境内与海外":"China & International","交付语言":"Delivery Languages","中文 / English":"Chinese / English","合作方式":"Engagement Model","专项服务或全流程合作":"Specialist / End-to-End Delivery","主要服务领域":"Core Services","01 科研数据分析":"01 Research Data Analytics","研究设计、数据整理、统计与生信分析、图表制作及论文支持。":"Study design, data curation, statistical and bioinformatics analysis, publication-ready figures, and manuscript support.","02 生物信息系统开发":"02 Clinical Laboratory & Bioinformatics Systems","16S、宏基因组、WES/WGS 等生物信息分析流程、报告系统与部署。":"Bioinformatics pipelines, reporting systems, and deployment for 16S, metagenomics, WES/WGS, and related workflows.","03 生物医药证据与资源研究":"03 Biopharma Evidence & Resource Intelligence","围绕疾病领域、证据需求、医院能力、数据资源和合作目标开展研究与匹配。":"Evidence, market, hospital-capability, and data-resource research aligned with disease areas and partnership objectives.","04 项目方案与执行":"04 Program Design & Execution","技术路线、工作计划、协作管理、阶段汇报与成果交付。":"Technical roadmaps, work plans, stakeholder coordination, milestone reviews, and final delivery.","项目需求":"Project Brief","数据与资料":"Data & Materials","分析或开发":"Analysis / Development","成果交付":"Delivery","临床真实世界数据":"Clinical & Real-World Data","单细胞与空间组学":"Single-Cell & Spatial Omics","16S / 宏基因组":"16S / Metagenomics","统计建模与因果推断":"Statistical Modeling & Causal Inference","软件系统与报告引擎":"Software Platforms & Reporting Engines","核心服务":"Core Services","围绕科研、临床检验和生物医药项目的实际需求，提供数据分析、系统开发、信息研究和项目执行服务。服务范围与交付内容根据项目资料和目标确定。":"We provide analytics, system development, evidence and market intelligence, and program execution for research, clinical laboratory, and biopharma projects. Scope and deliverables are defined against the available data, operational context, and project objectives.","科研数据分析与论文支持":"Research Analytics & Publication Support","医院 / 高校 / 科研团队":"Hospitals / Universities / Research Teams","面向临床真实数据、患者队列、公开数据库和多组学数据项目，提供研究设计、数据分析、成果整理和论文阶段支持。":"Study design, analytics, evidence synthesis, and publication-stage support for clinical datasets, patient cohorts, public databases, and multi-omics projects.","课题设计、数据可行性审核":"Study design and data feasibility review","数据清洗、统计与生信分析":"Data cleaning, statistics and bioinformatics","基金标书与项目申报支持":"Grant and proposal support","发表级图表、结果与方法整理":"Publication-ready figures, results, and methods","论文逻辑、返修与补充分析":"Manuscript structure, revision, and additional analyses","中英文材料整理与海外项目协作":"Chinese/English materials and international collaboration","临床实验室与生物信息系统开发":"Clinical Laboratory & Bioinformatics Systems","检验机构 / 医院 / IVD / 测序公司":"Clinical Labs / Hospitals / IVD / Sequencing Providers","根据业务流程、样例数据和报告需求，开发可运行、可追踪和可维护的分析流程及报告系统，适用于测序临检和科研生产化场景。":"We design and build operational, traceable, and maintainable analysis pipelines and reporting systems based on laboratory workflows, representative datasets, and reporting requirements for clinical testing and production-scale research.","16S 与宏基因组分析系统":"16S and metagenomics systems","WES / WGS / RNA-seq 流程":"WES / WGS / RNA-seq pipelines","自动质控、任务调度与日志":"Automated QC, orchestration and logging","报告模板与结果解释引擎":"Report templates and interpretation engines","本地化、私有化或云端部署":"On-premises, private-cloud, or public-cloud deployment","验证方案、文档、培训与迭代":"Validation, documentation, training and iteration","生物医药证据与资源研究":"Biopharma Evidence & Resource Intelligence","药企 / Biotech / CRO / 咨询机构":"Pharma / Biotech / CRO / Consulting","围绕疾病领域、研发阶段和证据需求，开展市场与证据研究、医院及科室调研、数据资源梳理和合作对象初筛。":"Market and evidence research, hospital and department profiling, data-resource mapping, and partner screening across disease areas and development stages.","疾病与适应证信息搜集":"Disease and indication intelligence","医院、科室与专家能力画像":"Hospital, department, and expert capability profiles","病例量、样本与数据可得性梳理":"Patient volume, biospecimen availability, and data feasibility","合作优先级与匹配评分框架":"Partner prioritization and scoring","真实世界研究与转化研究框架":"Real-world evidence and translational research frameworks","合作路径、风险和下一步建议":"Partnership pathway, risks and next steps","项目方案设计与执行支持":"Program Design & Execution Support","复杂、多方、跨学科项目":"Complex, Multi-Stakeholder Programs","适用于需要明确技术路线、工作计划、协作分工和交付标准，或涉及医院、实验、数据、算法及供应商多方协作的项目。":"For programs requiring a defined technical roadmap, work plan, responsibilities, and acceptance criteria, including multi-stakeholder collaboration across hospitals, laboratories, data teams, algorithms, and vendors.","目标拆解与技术路线设计":"Objective definition and technical roadmap","工作包、预算与里程碑":"Work packages, budget and milestones","数据字典、SOP 与验收标准":"Data dictionaries, SOPs and acceptance criteria","合作单位与供应商任务对接":"Partner and vendor coordination","阶段汇报、风险与变更管理":"Milestone reporting, risk and change management","结果整合与最终交付":"Integrated results and final delivery","以下为代表性项目类型展示，均已进行匿名化与脱敏处理，仅用于说明服务范围与交付能力，不展示合作单位名称、患者身份信息或其他敏感信息。结构图展示项目的核心数据流、分析环节与交付路径。":"The following anonymized case types illustrate our service scope and delivery capabilities. No partner names, directly identifiable patient information, or other sensitive details are shown. The diagrams summarize core data flows, analytical stages, governance controls, and delivery pathways.","系统开发":"System Development","EHR 临床数据支持系统":"Clinical Data Support System (EHR Data Support)","基于电子健康记录（Electronic Health Record，EHR）及其他临床数据，支持数据结构化、字段标准化、权限控制、数据查询与项目级数据提取。":"Built around electronic health record (EHR) and other clinical data, supporting data structuring, field standardization, access control, querying, and project-level extraction.","多源临床数据":"Multi-Source Clinical Data","EHR / LIS / 病例表单 / 随访与项目资料":"EHR / LIS / Case Forms / Follow-up & Project Data","脱敏、标准化与质量审核":"De-identification, Standardization & QC","去标识化 / 字段映射 / 单位统一 / 逻辑校验":"De-identification / Field Mapping / Unit Harmonization / Consistency Checks","临床数据底座":"Clinical Data Foundation","数据库 / 数据字典 / 权限控制 / 操作审计":"Database / Data Dictionary / Access Control / Audit Trail","查询、科研与项目应用":"Research & Program Applications","检索 / 数据提取 / 队列构建 / 项目协同":"Search / Extraction / Cohort Building / Collaboration","交付重点：":"Key Deliverables:","需求梳理、字段映射、数据结构、权限逻辑、流程原型与迭代优化。":"Requirements, field mapping, data architecture, access logic, workflow prototype and iterative optimization.","WES 变异分析与报告系统":"WES Variant Analysis & Reporting System","围绕全外显子测序数据处理、变异检测、注释、筛选与结果解释，构建自动化分析流程和标准化报告模块。":"An automated workflow and standardized reporting module for whole-exome sequencing data, covering quality control, alignment, variant calling, annotation, prioritization, and interpretation.","测序数据与样本信息":"Sequencing & Sample Data","FASTQ / 样本信息 / 家系或临床表型":"FASTQ / Sample Metadata / Family or Clinical Phenotype","质控、比对与变异检测":"QC, Alignment & Variant Calling","QC / Alignment / SNV-Indel / CNV（按方案）":"QC / Alignment / SNV-Indel / CNV (as scoped)","注释、筛选与证据整合":"Annotation, Prioritization & Evidence","频率 / 功能 / 疾病数据库 / 表型与文献证据":"Frequency / Function / Disease Databases / Phenotype & Literature","审核、解释与报告交付":"Review, Interpretation & Reporting","候选变异 / 证据说明 / 图表 / 标准化报告":"Candidate Variants / Evidence / Figures / Standardized Report","质控、比对、变异检测、注释筛选、证据整理和报告模板。":"QC, alignment, variant calling, annotation, prioritization, evidence synthesis and report templates.","微生物分析与报告系统":"Microbiome Analysis & Reporting","16S 菌群分析与报告系统":"16S Microbiome Analysis & Reporting System","面向临床研究、健康管理及科研样本的16S菌群分析，将测序结果与样本及受检者基础信息结合，形成菌群结构、文献关联微生物特征、功能预测与宿主特征关联的结构化报告。报告用于研究和专业辅助解读，不作为独立诊断依据。":"For clinical research, health-management, and research samples, this workflow integrates 16S sequencing profiles with sample and participant metadata to produce structured reports on community composition, literature-linked microbial features, predicted functional potential, and host-feature associations. Outputs are intended for research and professional interpretation, not standalone diagnosis.","样本与基础信息":"Sample & Contextual Metadata","样本类型 / 基础资料 / 用药 / 饮食与生活方式":"Sample Type / Background Data / Medication / Diet & Lifestyle","16S测序、质控与菌群解析":"16S Sequencing, QC & Microbiome Profiling","序列质控 / ASV或OTU / 分类注释 / 丰度与多样性分析":"Sequence QC / ASV or OTU Processing / Taxonomic Annotation / Abundance & Diversity","3 菌群分析与辅助解读模块":"3 Microbiome Analysis & Interpretation Modules","菌群结构与组成":"Microbiome Structure & Composition","多样性 · 均匀性 · 肠型 · B/F比值":"Diversity · Evenness · Enterotype · B/F Ratio","主要菌群构成与结构指标汇总":"Major taxa composition and structural metrics","文献关联与重点菌群":"Literature-Linked & Priority Taxa","常见共生菌 · 机会性菌 · 重点关注菌":"Common Commensals · Opportunistic Taxa · Priority Taxa","文献关联微生物与丰度偏离提示":"Literature-linked microbial features and abundance-deviation flags","功能与代谢潜能预测":"Predicted Functional & Metabolic Potential","维生素/氨基酸合成 · 短链脂肪酸":"Predicted Vitamin/Amino-Acid Pathways · Short-Chain Fatty Acids","功能通路与代谢潜能的预测性指标":"Predicted pathway-level and metabolic-potential indicators","宿主特征与菌群关联":"Host-Feature & Microbiome Associations","肠脑轴 · 肝肠轴 · 生活方式关联":"Gut-Brain Axis · Gut-Liver Axis · Lifestyle Associations","研究文献中的菌群—宿主特征关联":"Microbiome–host associations reported in research literature","4 结果摘要、关注项与专业解读":"4 Results Summary, Review Flags & Professional Interpretation","审核规则 · 报告生成 · 专业人员复核接口":"Review Rules · Report Generation · Professional Review Interface","16S分析流程、菌群结构与文献关联解读模块、报告目录、报告生成引擎、审核规则、部署与培训。":"16S analysis workflow, microbiome structure and literature-linked interpretation modules, report architecture, reporting engine, review rules, deployment, and training.","科研与证据项目":"Research & Evidence Program","临床真实世界数据分析":"Clinical & Real-World Data Analytics","基于脱敏后的患者级数据开展队列构建、变量清洗、结局定义、统计建模、证据生成、图表制作和研究成果整理。":"Cohort construction, variable curation, endpoint definition, statistical modeling, evidence generation, visualization, and research deliverables using de-identified patient-level data.","研究问题与数据安全":"Research Objectives & Data Governance","研究目标 / 数据来源 / 脱敏 / 合规与访问边界":"Objectives / Data Sources / De-identification / Governance & Access Controls","队列、变量与结局定义":"Cohort, Variables & Endpoints","入排标准 / 暴露与结局 / 时间零点 / 数据字典":"Eligibility / Exposure & Outcome / Time Zero / Data Dictionary","统计建模与稳健性验证":"Statistical Modeling & Robustness Assessment","描述 / 生存 / 纵向 / PS / 因果 / 亚组与敏感性分析":"Descriptive / Survival / Longitudinal / PS / Causal / Subgroup & Sensitivity","证据、图表与研究交付":"Evidence, Figures & Research Deliverables","统计表 / 发表级图表 / 解释 / 报告或论文支持":"Statistical Tables / Publication Figures / Interpretation / Report or Manuscript","数据审核、研究设计、统计与因果分析、发表级图表、结果解释和文稿支持。":"Data review, study design, statistical and causal analysis, publication-grade figures, interpretation and manuscript support.","产品研究与战略":"Product Research & Strategy","医疗 AI Agent 与临床科研 AI 产品研究":"Healthcare AI Agent & Clinical Research AI Product Strategy","围绕医疗 AI Agent 与临床科研 AI 产品，开展公开资料研究、统一 Case 实测、目标用户调研、评分体系设计和产品路线研判，形成可复核的竞品与产品决策报告。":"A structured competitive-intelligence and product-strategy study for healthcare AI agents and clinical research AI products, combining public-source research, standardized case-based evaluation, target-user research, scoring-framework design, and product-roadmap recommendations.","市场与产品定位":"Market & Product Positioning","• 医生、证据、科研与院内入口":"• Clinical, evidence, research, and hospital-workflow entry points","• 功能、工作流与中国适配":"• Capabilities, workflows, and China-market fit","• 竞品A–E与国际标杆":"• Anonymized competitors A–E and global benchmarks","公开资料 + 产品实测":"Public Sources + Product Evaluation","统一Case实测":"Standardized Case-Based Evaluation","• 临床循证与药物安全":"• Clinical evidence retrieval and medication safety","• 科研设计与统计建议":"• Research design and statistical guidance","• 引用真实性与论断支持":"• Citation validity and claim–evidence alignment","同题、同版本、同记录模板":"Same Task · Version · Evaluation Template","目标用户研究":"Target-User Research","• 用户角色与真实任务":"• User roles and real-world tasks","• AI使用、信任与边界":"• AI adoption, trust, and boundaries","• 科研需求、付费与采购":"• Research needs, payment, and procurement","问卷 + 访谈 + 证据清洗":"Survey + Interviews + Data-Quality Controls","分层评分，不用单一“万能总分”":"Layered Evaluation—Not a Single Composite Score","医学/科研可信度":"Clinical & Research Reliability","任务理解 · 正确性 · 证据 · 安全 · 完整性":"Understanding · Accuracy · Evidence · Safety · Completeness","产品体验":"Product Usability","准入 · 稳定 · 引用 · 全文 · 跨端":"Access · Stability · Citations · Full Text · Cross-Platform","红线":"Safety Gate","错误封顶":"Critical-Error Ceiling","产品定位":"Product Positioning","目标入口与差异化":"Target Entry Point & Differentiation","能力优先级":"Capability Priorities","P0 / P1 / P2 路线":"P0 / P1 / P2 Roadmap","落地计划":"Implementation Plan","90天样板与工作流":"90-Day Pilot & Workflow","验收指标":"Acceptance Metrics","可信度 · 效率 · 使用率":"Reliability · Efficiency · Adoption","竞品矩阵、统一Case测试、用户问卷与访谈、分层评分体系、产品定位、功能优先级及阶段落地建议。":"Competitive landscape, standardized case-based evaluation, user surveys and interviews, layered scoring, product positioning, capability priorities, and phased implementation recommendations.","临床智能系统方案":"Clinical Decision Support System","肿瘤临床智能决策与全周期管理系统":"Oncology Clinical Decision Support & Longitudinal Care Management System","围绕肿瘤辅助决策、疾病风险监管与健康管理，设计灵活多模态接入、规则与知识层、科研增强、报告服务、人工复核、审计治理和分阶段交付框架。":"A phased architecture for oncology decision support, risk surveillance, and longitudinal care management, integrating flexible multimodal intake, deterministic rules, evidence mapping, research augmentation, human review, service delivery, and audit governance.","结构化变异":"Structured Variants","检测报告":"Laboratory Reports","病理与图像":"Pathology & Imaging","组织学 / CT / MRI":"Histology / CT / MRI","检验指标":"Laboratory Results","LIS / 动态监测":"LIS / Longitudinal Monitoring","病例与治疗信息":"Clinical & Treatment Data","病史 / 分期 / 治疗线":"History / Stage / Line of Therapy","多模态接入与病例对象层":"Multimodal Intake & Clinical Object Layer","标准化处理 → Clinical Objects → Case Bundle → 来源与版本追踪":"Standardization → Clinical Objects → Case Bundle → Provenance & Versioning","临床决策、知识映射与人工复核层":"Clinical Decision Support, Knowledge Mapping & Human Review","规则引擎":"Rule Engine","缺失/禁忌/路径/MDT触发":"Missing Data / Contraindications / Pathways / MDT Triggers","知识与证据分级":"Knowledge & Evidence Grading","药物·突变·疾病·指南 L1/L2/L3":"Drug · Variant · Disease · Guideline Evidence L1/L2/L3","病例编排与复核":"Case Orchestration & Review","科研增强与候选知识生产":"Research Augmentation & Candidate Knowledge Generation","研究型机制解释 · RAG/LLM · 条件触发模型 · 强制人工复核":"Mechanistic Research · RAG/LLM · Conditional Models · Mandatory Human Review","诊断与分型":"Diagnostic & Molecular Classification Support","病例摘要 · 分子发现":"Case Summary · Molecular Findings","治疗与用药辅助":"Treatment Decision Support","推荐 · 规避 · 耐药路径":"Recommendations · Contraindications · Resistance Pathways","风险评估":"Risk Assessment","复发 · 毒性 · 动态监测":"Recurrence · Toxicity · Longitudinal Monitoring","健康干预与随访":"Care Management & Follow-up","复查 · 预约 · 长期管理":"Reassessment · Referral · Longitudinal Management","LAYER 4 评估中心 · 版本注册 · 审计日志 · PCCP变更控制 · 经验/相似病例记忆":"LAYER 4 · Evaluation Hub · Version Registry · Audit Trail · PCCP Change Control · Experience Memory","产品定义、分层架构、模块需求、对象与数据模型、证据分级、人工复核、审计治理、阶段路线和验收标准。":"Product definition, layered architecture, module requirements, object and data models, evidence grading, human review, audit governance, phased roadmap, and acceptance criteria.","数据分析与技术能力":"Data & Technology","项目启动前对数据质量、变量定义、样本量和研究目标进行审核，并据此制定分析方案、开发路线和交付标准。":"Before launch, we assess data quality, variable definitions, sample size, and research objectives to establish the analytical plan, development roadmap, and acceptance criteria.","涉及患者数据、临床诊断、伦理审查或监管用途的项目，将在合作前根据实际需求确认数据安全、伦理和相关资质要求。":"Projects involving patient data, clinical decision support, ethics review, or regulated use are initiated only after data-security, ethics, and responsible-party requirements have been confirmed.","临床与真实世界数据":"Clinical & Real-World Data","队列构建、病例与样本对齐、缺失与异常处理、生存分析、纵向数据、倾向评分、因果推断、预测模型与验证。":"Cohort construction, patient–sample linkage, missing and anomalous data handling, survival and longitudinal analysis, propensity methods, causal inference, predictive modeling, and validation.","基因组与转录组":"Genomics & Transcriptomics","WES、WGS、panel、RNA-seq、变异与表达分析、通路与网络、外部队列验证、临床表型联合分析。":"WES, WGS, panel sequencing, RNA-seq, variant and expression analysis, pathway and network analysis, external-cohort validation, and integration with clinical phenotypes.","细胞注释、亚群与状态、差异与富集、轨迹、细胞通讯、调控网络、空间定位、多模态整合。":"Cell annotation, subpopulations and states, differential and enrichment analysis, trajectories, cell communication, regulatory networks, spatial localization and multimodal integration.","微生物组与病原数据":"Microbiome & Pathogen Data","16S、宏基因组、mNGS 数据质控、物种与功能分析、临床关联、风险模型和可解释报告。":"Quality control, taxonomic and functional profiling, clinical-association analysis, risk modeling, and interpretable reporting for 16S, metagenomic, and mNGS data.","多组学与机制整合":"Multi-Omics & Mechanistic Integration","临床、基因、表达、蛋白、代谢、微生物等多层数据的联合建模、机制链构建与稳健性验证。":"Joint modeling, mechanistic-pathway construction, and robustness assessment across clinical, genomic, transcriptomic, proteomic, metabolic, and microbiome data layers.","软件工程与部署":"Software Engineering & Deployment","流程容器化、任务管理、数据库、前后端、权限审计、报告生成、版本管理、部署与运维文档。":"Workflow containerization, job orchestration, databases, front-end and back-end development, access control and audit logging, report generation, version management, deployment, and operations documentation.","标准合作流程":"Collaboration Process","根据项目类型采用分阶段沟通和交付方式，确保需求、范围、进度及验收标准清晰一致。":"We use a phased engagement and delivery model to align scope, responsibilities, timelines, and acceptance criteria.","需求澄清与可行性预评估":"Requirements Clarification & Feasibility Review","了解项目背景、目标、数据来源、样本量、计划周期、预算范围和预期成果。":"Clarify background, objectives, data sources, sample size, timeline, budget range and expected outcomes.","数据审核与项目边界确认":"Data Review & Scope Definition","审核数据完整性、变量定义、样本对应关系、伦理与隐私条件，形成问题清单及补充资料要求。":"Review data completeness, variable definitions, sample linkage, ethics, and privacy conditions; produce an issue log and supplementary-data request.","方案、报价与里程碑":"Proposal, Pricing & Milestones","形成项目方案、工作内容、报价、计划周期、阶段交付和修改范围。":"Define the project plan, work scope, pricing, schedule, phased deliverables and revision boundaries.","分析 / 开发与阶段汇报":"Analysis / Development & Milestone Reviews","按照既定计划开展分析或开发工作，定期同步中间结果、问题和下一阶段安排。":"Execute the agreed plan and regularly communicate interim results, issues and next-stage actions.","质量审核、交付与后续沟通":"Quality Review, Delivery & Post-Delivery Support","完成结果审核、文件整理、系统交付或汇报说明，并根据约定开展必要的解释、培训或迭代。":"Complete quality review, documentation, system or report delivery, and the agreed interpretation, training, or iteration.","我们根据不同机构的资料基础、项目目标和内部能力，提供相应的专项服务或全流程合作。":"We tailor specialist or end-to-end engagements to each organization’s data readiness, objectives, and internal capabilities.","医院与临床科室":"Hospitals & Clinical Departments","从病例数据、样本和临床问题出发，搭建研究队列、分析路径和成果交付。":"Build cohorts, analytical pathways and deliverables from clinical questions, patient data and samples.","常见需求：已有数据分析、临床课题设计":"Typical needs: analysis of existing datasets and clinical study design","高校与科研团队":"Universities & Research Teams","支持基金、课题设计、多组学分析、发表图表、论文与返修。":"Support for grants, study design, multi-omics analysis, publication figures, manuscripts and revisions.","常见需求：基金课题、多组学分析、论文返修":"Typical needs: grants, multi-omics and manuscript revision","检验与测序机构":"Diagnostic Laboratories & Sequencing Providers","将现有人工流程升级为标准化分析、报告和部署系统。":"Upgrade manual workflows into standardized analysis, reporting and deployment systems.","常见需求：分析流程、报告系统、私有化部署":"Typical needs: analysis pipelines, reporting systems, and on-premises deployment","药企与生物技术企业":"Pharmaceutical & Biotechnology Companies","围绕目标适应证、研发与上市阶段、证据需求和合作资源，提供行业调研、医院与数据资源匹配、真实世界研究设计与数据分析、项目框架和执行支持。":"Across discovery, clinical development, launch, and post-marketing stages, we provide market and evidence intelligence, hospital and data-resource matching, real-world study design and analytics, program architecture, and execution support.","常见需求：行业调研、资源匹配、不同阶段真实世界数据分析、项目执行":"Typical needs: market intelligence, resource matching, lifecycle-specific RWE/RWD analytics, and program execution","客户评价":"Client Feedback","来自临床科研、多组学分析与系统开发项目的匿名合作反馈。":"Anonymized feedback from clinical research, multi-omics and system development engagements.","临":"C","某三甲医院项目负责人":"Project Lead, Tertiary Hospital","临床真实世界数据项目":"Clinical Real-World Data Program","项目启动前先完成数据结构、变量口径和问题清单梳理，阶段汇报清楚，便于科室内部持续确认和推进后续工作。":"The team clarified the data structure, variable definitions and open questions before launch. Milestone reporting was clear and supported internal alignment and continued execution.","研":"R","某高校课题组负责人":"Research Group Lead, University","多组学科研与论文支持":"Multi-Omics Research & Publication Support","分析方案能够围绕研究问题及时调整，图表、方法和结果整理较完整，返修阶段的沟通与补充分析也比较及时。":"The analytical plan adapted well to the research question. Figures, methods and results were well organized, with timely communication and additional analyses during revision.","企":"B","某生物技术企业研发负责人":"R&D Lead, Biotechnology Company","分析系统与项目执行":"Analytics System & Program Delivery","从需求拆解、流程设计到交付文档都有明确节点，减少了研发、数据和业务团队之间的反复沟通。":"Clear milestones from requirement decomposition and workflow design through delivery documentation reduced repeated communication across R&D, data and business teams.","以上为匿名化展示文案；正式上线前应使用已取得客户授权的真实评价替换或确认。":"These are anonymized display statements. Before public launch, replace or confirm them with authorized client feedback.","关于知图生物":"About Zhitu","深圳市知图生物科技有限公司专注于生命科学数据分析与生物信息技术服务。公司围绕临床科研、基因测序与多组学数据、微生物组分析、临检系统开发及生物医药项目需求，为客户提供技术方案、分析实施、系统开发和项目管理支持。":"Zero to Biosciences (Z2Bio) specializes in life sciences data analytics, bioinformatics engineering, and program delivery. We support clinical research, sequencing and multi-omics, microbiome analysis, clinical bioinformatics systems, and biopharma programs through solution design, analytical execution, software development, and program management.","我们重视研究问题与数据基础的匹配，项目开始前明确工作范围、交付内容和责任边界，并通过阶段沟通保证项目进度和结果质量。公司位于深圳，可支持中国境内及海外项目合作。":"We align research questions and business objectives with the available data and operational context, define scope, deliverables, and responsibilities before launch, and maintain quality through milestone-based communication. Based in Shenzhen, we support projects in China and internationally.","问题导向":"Problem-Led","从临床、科研或业务问题出发设计分析与开发方案。":"Design analytical and development solutions around clearly defined clinical, research, or business questions.","分阶段交付":"Phased Delivery","通过数据审核、方案确认、阶段汇报和最终验收推进项目。":"Advance projects through data review, scope confirmation, milestone reporting and final acceptance.","可复现与可维护":"Reproducible & Maintainable","根据项目约定提供分析记录、代码、文档或系统维护资料。":"Provide analysis records, code, documentation or maintenance materials as agreed.","数据安全":"Data Security","对涉及患者和机构的数据明确传输、访问、存储与使用边界。":"Define transmission, access, storage and use boundaries for patient and institutional data.","项目交付内容":"Project Deliverables","具体交付物根据项目类型确定，并在项目确认书或合同中明确文件格式、版本、验收方式和修改范围。":"Deliverables are tailored to the project and specified in the project confirmation or contract, including file formats, versioning, acceptance criteria, and revision scope.","数据审核报告与问题清单":"Data review report and issue log","研究方案 / 系统需求说明书":"Study protocol / System requirements specification","清洗后数据库与数据字典":"Curated database and data dictionary","统计表、生信结果与可复现代码":"Statistical outputs, bioinformatics results, and reproducible code","发表级 PNG / PDF / SVG 图表":"Publication-ready PNG / PDF / SVG figures","方法、结果和图注整理":"Methods, results and figure legends","可部署系统、报告模板与文档":"Deployable software, report templates, and technical documentation","阶段汇报与项目决策建议":"Milestone reports and decision recommendations","欢迎医院、高校、科研团队、检验机构及生物医药企业就数据分析、科研项目、系统开发和项目合作进行咨询。":"We welcome inquiries from hospitals, universities, research teams, clinical laboratories, and biopharmaceutical companies regarding analytics, research programs, system development, and partnership opportunities.","项目咨询与技术合作":"Project & Technical Collaboration","商务合作与报价":"Business & Pricing","公司信息与一般咨询":"Corporate & General Inquiries","联系电话":"Telephone","公司所在地：深圳":"Location: Shenzhen, China","服务范围：中国境内及海外项目":"Coverage: China and international projects","请勿通过普通邮件直接发送包含姓名、身份证号、住院号或其他可识别患者身份的信息。患者级数据应在签署保密及数据处理约定后，通过双方确认的安全方式传输。":"Do not send names, government identification numbers, medical record numbers, or other directly identifiable patient information by standard email. Patient-level data should be transferred only through an agreed secure channel after confidentiality and data-processing terms are in place.","填写以下信息后，可通过默认邮件客户端发送至项目联系人，也可以复制内容后通过其他方式沟通。":"Complete the form to open your default email client, or copy the content for another communication channel.","称呼 / 机构":"Name / Organization","联系方式":"Contact Details","项目类型":"Project Type","课题 / 基金项目":"Study / Grant Proposal","临检或生信系统开发":"Clinical Laboratory / Bioinformatics Systems","医药信息 / 医院及数据资源研究":"Biopharma Evidence / Hospital & Data Resource Research","项目方案与执行支持":"Program Design & Execution","其他":"Other","计划周期":"Expected Timeline","待沟通":"To Be Discussed","1个月内":"Within 1 Month","1–3个月":"1–3 Months","3–6个月":"3–6 Months","6个月以上":"More Than 6 Months","项目目标与现有资料":"Objectives & Available Materials","通过邮件提交":"Submit by Email","复制需求内容":"Copy Project Brief","项目邮件将发送至 vicky@zhitushengwu.cn":"The inquiry email will be addressed to vicky@zhitushengwu.cn","深圳市知图生物科技有限公司提供生命科学数据分析、生物信息技术、临检系统开发及生物医药项目支持服务。":"Z2Bio provides life science data analytics, bioinformatics technology, clinical testing systems and biopharma program support.","深圳｜中国境内及海外项目":"Shenzhen, China | China & International Projects","网站导航":"Navigation","© 2026 深圳市知图生物科技有限公司 | 服务范围、数据处理、知识产权及交付标准以双方正式合同为准":"© 2026 Shenzhen Z2Bio Co., Ltd. | Service scope, data processing, intellectual property and delivery standards are governed by the executed agreement.","知图生物｜生命科学数据分析与生物信息技术服务":"Z2Bio | Life Sciences Data Analytics & Bioinformatics Services","3　个体化临床菌群报告模块":"3 Personalized Clinical Microbiome Modules","4　结果摘要、关注项与专业解读":"4 Results Summary, Review Flags & Professional Interpretation","LAYER 4　评估中心 · 版本注册 · 审计日志 · PCCP变更控制 · 经验/相似病例记忆":"LAYER 4  Evaluation Hub · Version Registry · Audit Trail · PCCP Change Control · Experience/Similar-Case Memory","© 2026 深圳市知图生物科技有限公司  |  服务范围、数据处理、知识产权及交付标准以双方正式合同为准":"© 2026 Shenzhen Z2Bio Co., Ltd. | Service scope, data processing, intellectual property and delivery standards are governed by the executed agreement.","围绕医疗智能体与科研AI产品，开展公开资料研究、统一Case实测、目标用户调研、评分体系设计和产品路线研判，形成可复核的竞品与产品决策报告。":"A structured competitive-intelligence and product-strategy study for healthcare AI assistants, combining public-source research, standardized case-based evaluations, target-user research, scoring-framework design, and product-roadmap recommendations.","医生、证据、科研与院内入口":"Clinical · Evidence · Research · Hospital Workflows","功能、工作流与中国适配":"Capabilities · Workflow · China Fit","临床循证与药物安全":"Clinical Evidence Retrieval & Medication Safety","科研设计与统计建议":"Research Design & Statistical Guidance","引用真实性与论断支持":"Citation Validity & Claim-Evidence Alignment","AI使用、信任与边界":"AI Adoption · Trust · Boundaries","科研需求、付费与采购":"Research Needs · Payment · Procurement","ZHITU BIOSCIENCES":"ZERO TO BIOSCIENCES","用户角色与真实任务":"User Roles · Real-World Tasks"};
+      const attributeTranslations = {"知图生物首页":"Z2Bio Home","打开导航菜单":"Open Navigation Menu","医疗智能体竞品研究与产品决策框架图":"Healthcare AI Agent and Clinical Research AI Product Strategy Framework","知图生物Logo":"Z2Bio Logo","例如：王老师 / 某医院检验科":"e.g., Dr. Wang / Hospital Laboratory","邮箱或电话":"Email or telephone","请简要说明项目背景、数据或材料、样本量、期望交付和关键时间节点。":"Briefly describe the project background, available data or materials, sample size, expected deliverables, and key milestones.","16S临床菌群检测报告框架图":"16S Microbiome Analysis and Reporting Framework","EHRS临床信息辅助系统结构图":"Clinical Data Support System (EHR Data Support) Architecture","WES变异分析与报告系统结构图":"WES Variant Analysis and Reporting System Architecture","临床真实世界数据分析结构图":"Clinical and Real-World Data Analytics Framework","五星评价":"Five-star rating","肿瘤临床智能决策疾病监管健康管理系统框架图":"Oncology Clinical Decision Support, Risk Surveillance, and Longitudinal Care Architecture"};
       const originalText = new WeakMap();
       const originalAttrs = new WeakMap();
       let currentLang = 'zh';
@@ -2358,12 +3330,12 @@
       function updateMeta(lang) {
         const meta = lang === 'en' ? {
           title: 'Z2Bio | Life Sciences Data Analytics & Bioinformatics Services',
-          description: 'Z2Bio (Zero to Biosciences) provides life sciences data analytics, clinical bioinformatics systems, biopharma evidence and resource research, and program execution support.',
+          description: 'Z2Bio (Zero to Biosciences) provides life sciences data analytics, clinical laboratory and bioinformatics systems, biopharma evidence and resource intelligence, and end-to-end program execution.',
           ogTitle: 'Z2Bio | Life Sciences Data Analytics & Bioinformatics Services',
-          ogDescription: 'Research analytics, clinical bioinformatics systems, biopharma evidence and resource research, and program execution.'
+          ogDescription: 'Research analytics, clinical laboratory and bioinformatics systems, biopharma evidence and resource intelligence, and program execution.'
         } : {
           title: '知图生物｜生命科学数据分析与生物信息技术服务',
-          description: '深圳市知图生物科技有限公司提供生命科学数据分析、生物信息技术服务、临检生信系统开发、生物医药证据与资源研究及项目执行支持。',
+          description: '深圳市知图生物科技有限公司提供生命科学数据分析、生物信息技术服务、临床实验室与生物信息系统开发、生物医药证据与资源研究及项目执行支持。',
           ogTitle: '知图生物｜生命科学数据分析与生物信息技术服务',
           ogDescription: '科研数据分析、临检生信系统开发、生物医药证据与资源研究、项目方案与执行支持。'
         };
@@ -2708,6 +3680,348 @@
       if (document.fonts?.ready) document.fonts.ready.then(runLayoutAudit);
       setTimeout(runLayoutAudit, 220);
       setTimeout(runLayoutAudit, 700);
+    });
+  })();
+</script>
+
+
+<script>
+  (() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const carousels = [];
+
+    const locale = () => (
+      document.documentElement.dataset.lang === 'en'
+        ? {
+            previous: 'Previous group',
+            next: 'Next group',
+            page: (current, total) => `Page ${current} of ${total}`,
+            goTo: (current, total) => `Go to page ${current} of ${total}`
+          }
+        : {
+            previous: '上一组',
+            next: '下一组',
+            page: (current, total) => `第 ${current} / ${total} 组`,
+            goTo: (current, total) => `转到第 ${current} 组，共 ${total} 组`
+          }
+    );
+
+    class ContentCarousel {
+      constructor(root) {
+        this.root = root;
+        this.viewport = root.querySelector('.carousel-viewport');
+        this.track = root.querySelector('.carousel-track');
+        this.slides = Array.from(root.querySelectorAll('.carousel-slide'));
+        this.dotsContainer = root.querySelector('.carousel-dots');
+        this.status = root.querySelector('.carousel-status');
+        this.prev = root.querySelector('.carousel-prev');
+        this.next = root.querySelector('.carousel-next');
+        this.mode = root.dataset.carouselMode;
+        this.interval = Number(root.dataset.carouselInterval || 9000);
+        this.pageStarts = [];
+        this.activePage = 0;
+        this.timer = 0;
+        this.scrollFrame = 0;
+        this.pointerDown = false;
+        this.dragStartX = 0;
+        this.dragStartScroll = 0;
+
+        this.bind();
+        this.rebuild();
+        this.startAutoplay();
+      }
+
+      slidesPerPage() {
+        if (this.mode === 'services' && window.innerWidth >= 900) return 2;
+        return 1;
+      }
+
+      bind() {
+        this.prev.addEventListener('click', () => this.goToPage(this.activePage - 1, true));
+        this.next.addEventListener('click', () => this.goToPage(this.activePage + 1, true));
+
+        this.viewport.addEventListener('scroll', () => {
+          cancelAnimationFrame(this.scrollFrame);
+          this.scrollFrame = requestAnimationFrame(() => this.syncFromScroll());
+        }, { passive: true });
+
+        this.root.addEventListener('mouseenter', () => this.root.classList.add('is-hovering'));
+        this.root.addEventListener('mouseleave', () => this.root.classList.remove('is-hovering'));
+        this.root.addEventListener('focusin', () => this.root.classList.add('is-focused'));
+        this.root.addEventListener('focusout', () => this.root.classList.remove('is-focused'));
+
+        this.viewport.addEventListener('pointerdown', (event) => {
+          if (event.pointerType === 'mouse' && event.button !== 0) return;
+          this.pointerDown = true;
+          this.dragStartX = event.clientX;
+          this.dragStartScroll = this.viewport.scrollLeft;
+          this.stopAutoplay();
+          this.viewport.setPointerCapture?.(event.pointerId);
+        });
+
+        this.viewport.addEventListener('pointermove', (event) => {
+          if (!this.pointerDown) return;
+          const delta = event.clientX - this.dragStartX;
+          this.viewport.scrollLeft = this.dragStartScroll - delta;
+        });
+
+        const endDrag = (event) => {
+          if (!this.pointerDown) return;
+          this.pointerDown = false;
+          this.viewport.releasePointerCapture?.(event.pointerId);
+          this.snapToNearest();
+          this.startAutoplay();
+        };
+
+        this.viewport.addEventListener('pointerup', endDrag);
+        this.viewport.addEventListener('pointercancel', endDrag);
+
+        this.viewport.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            this.goToPage(this.activePage - 1, true);
+          } else if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            this.goToPage(this.activePage + 1, true);
+          } else if (event.key === 'Home') {
+            event.preventDefault();
+            this.goToPage(0, true);
+          } else if (event.key === 'End') {
+            event.preventDefault();
+            this.goToPage(this.pageStarts.length - 1, true);
+          }
+        });
+      }
+
+      rebuild() {
+        const perPage = this.slidesPerPage();
+        this.pageStarts = [];
+        for (let index = 0; index < this.slides.length; index += perPage) {
+          this.pageStarts.push(index);
+        }
+
+        this.activePage = Math.min(this.activePage, this.pageStarts.length - 1);
+        this.buildDots();
+        this.updateLabels();
+        this.goToPage(this.activePage, false);
+        requestAnimationFrame(() => this.updateHeight());
+      }
+
+      buildDots() {
+        this.dotsContainer.innerHTML = '';
+        this.pageStarts.forEach((_, pageIndex) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'carousel-dot';
+          dot.setAttribute('role', 'tab');
+          dot.addEventListener('click', () => this.goToPage(pageIndex, true));
+          this.dotsContainer.appendChild(dot);
+        });
+      }
+
+      updateLabels() {
+        const lang = document.documentElement.dataset.lang === 'en' ? 'en' : 'zh';
+        const label = this.root.dataset[lang === 'en' ? 'labelEn' : 'labelZh'];
+        const copy = locale();
+
+        this.viewport.setAttribute('aria-label', label);
+        this.dotsContainer.setAttribute('aria-label', label);
+        this.prev.setAttribute('aria-label', copy.previous);
+        this.next.setAttribute('aria-label', copy.next);
+
+        Array.from(this.dotsContainer.children).forEach((dot, index) => {
+          dot.setAttribute('aria-label', copy.goTo(index + 1, this.pageStarts.length));
+        });
+
+        this.renderState();
+      }
+
+      targetLeft(pageIndex) {
+        const slideIndex = this.pageStarts[pageIndex] ?? 0;
+        const slide = this.slides[slideIndex];
+        if (!slide) return 0;
+        return Math.max(0, slide.offsetLeft - this.track.offsetLeft);
+      }
+
+      goToPage(pageIndex, userInitiated) {
+        const maxPage = this.pageStarts.length - 1;
+        const targetPage = Math.max(0, Math.min(maxPage, pageIndex));
+        this.activePage = targetPage;
+
+        this.viewport.scrollTo({
+          left: this.targetLeft(targetPage),
+          behavior: reduceMotion || !userInitiated ? 'auto' : 'smooth'
+        });
+
+        this.renderState();
+        setTimeout(() => this.updateHeight(), reduceMotion ? 0 : 260);
+
+        if (userInitiated) {
+          this.stopAutoplay();
+          this.startAutoplay();
+        }
+      }
+
+      nearestPage() {
+        const current = this.viewport.scrollLeft;
+        let nearest = 0;
+        let distance = Infinity;
+
+        this.pageStarts.forEach((_, pageIndex) => {
+          const candidateDistance = Math.abs(current - this.targetLeft(pageIndex));
+          if (candidateDistance < distance) {
+            distance = candidateDistance;
+            nearest = pageIndex;
+          }
+        });
+
+        return nearest;
+      }
+
+      syncFromScroll() {
+        const nextPage = this.nearestPage();
+        if (nextPage !== this.activePage) {
+          this.activePage = nextPage;
+          this.renderState();
+          this.updateHeight();
+        }
+      }
+
+      snapToNearest() {
+        this.goToPage(this.nearestPage(), true);
+      }
+
+      visibleSlides() {
+        const start = this.pageStarts[this.activePage] ?? 0;
+        const end = this.pageStarts[this.activePage + 1] ?? this.slides.length;
+        return this.slides.slice(start, end);
+      }
+
+      updateHeight() {
+        // V26 uses fixed responsive carousel heights so every slide remains
+        // visually stable when autoplay or manual navigation changes pages.
+        this.viewport.style.removeProperty('height');
+      }
+
+      renderState() {
+        const copy = locale();
+        const total = this.pageStarts.length;
+        const activeStart = this.pageStarts[this.activePage] ?? 0;
+        const activeEnd = this.pageStarts[this.activePage + 1] ?? this.slides.length;
+
+        this.slides.forEach((slide, index) => {
+          const active = index >= activeStart && index < activeEnd;
+          slide.classList.toggle('is-active', active);
+          slide.setAttribute('aria-hidden', String(!active));
+        });
+
+        Array.from(this.dotsContainer.children).forEach((dot, index) => {
+          const active = index === this.activePage;
+          dot.classList.toggle('active', active);
+          dot.setAttribute('aria-selected', String(active));
+          dot.tabIndex = active ? 0 : -1;
+        });
+
+        this.prev.disabled = this.activePage === 0;
+        this.next.disabled = this.activePage === total - 1;
+        this.status.textContent = copy.page(this.activePage + 1, total);
+      }
+
+      startAutoplay() {
+        this.stopAutoplay();
+        if (reduceMotion || this.pageStarts.length <= 1) return;
+
+        this.timer = window.setInterval(() => {
+          const nextPage = this.activePage >= this.pageStarts.length - 1
+            ? 0
+            : this.activePage + 1;
+
+          this.activePage = nextPage;
+          this.viewport.scrollTo({
+            left: this.targetLeft(nextPage),
+            behavior: 'smooth'
+          });
+          this.renderState();
+          setTimeout(() => this.updateHeight(), reduceMotion ? 0 : 260);
+        }, this.interval);
+      }
+
+      stopAutoplay() {
+        if (this.timer) {
+          clearInterval(this.timer);
+          this.timer = 0;
+        }
+      }
+    }
+
+    function initialize() {
+      document.querySelectorAll('.content-carousel').forEach(root => {
+        carousels.push(new ContentCarousel(root));
+      });
+
+      let resizeTimer = 0;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => {
+          carousels.forEach(carousel => carousel.rebuild());
+        }, 120);
+      }, { passive: true });
+
+      window.addEventListener('orientationchange', () => {
+        setTimeout(() => carousels.forEach(carousel => carousel.rebuild()), 220);
+      }, { passive: true });
+
+      window.addEventListener('zhitu-language-change', () => {
+        setTimeout(() => {
+          carousels.forEach(carousel => {
+            carousel.updateLabels();
+            carousel.updateHeight();
+          });
+        }, 120);
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        carousels.forEach(carousel => carousel.startAutoplay());
+      });
+
+      if (document.fonts?.ready) {
+        document.fonts.ready.then(() => {
+          carousels.forEach(carousel => carousel.rebuild());
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initialize);
+    } else {
+      initialize();
+    }
+  })();
+</script>
+
+
+<script>
+  (() => {
+    function activateCaseSlides() {
+      document.querySelectorAll(
+        '.content-carousel[data-carousel-mode="cases"] .case-card, ' +
+        '.content-carousel[data-carousel-mode="cases"] .reveal'
+      ).forEach(element => {
+        element.classList.add('active');
+        element.style.opacity = '1';
+        element.style.transform = 'none';
+        element.style.visibility = 'visible';
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', activateCaseSlides);
+    } else {
+      activateCaseSlides();
+    }
+
+    window.addEventListener('zhitu-language-change', () => {
+      setTimeout(activateCaseSlides, 0);
     });
   })();
 </script>
