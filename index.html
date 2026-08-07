@@ -4090,56 +4090,129 @@
 <script>
   (() => {
     const casePosters = [
-      ['case_poster_previews/case-01.png?v=20260806-wrapfix', 'EHR 临床数据支持系统'],
-      ['case_poster_previews/case-02.png?v=20260806-wrapfix', 'WES 变异分析与报告系统'],
-      ['case_poster_previews/case-03.png?v=20260806-wrapfix', '16S 菌群分析与报告系统'],
-      ['case_poster_previews/case-04.png?v=20260806-wrapfix', '临床真实世界数据分析'],
-      ['case_poster_previews/case-05.png?v=20260806-wrapfix', '医疗 AI Agent 与临床科研 AI 产品研究'],
-      ['case_poster_previews/case-06.png?v=20260806-wrapfix', '肿瘤临床智能决策与全周期管理系统']
+      {
+        zh: ['case_poster_previews/case-01.png?v=20260806-wrapfix', 'EHR 临床数据支持系统'],
+        en: ['case_poster_previews/en/case-01.png?v=20260807-enposters', 'EHR Clinical Data Support System']
+      },
+      {
+        zh: ['case_poster_previews/case-02.png?v=20260806-wrapfix', 'WES 变异分析与报告系统'],
+        en: ['case_poster_previews/en/case-02.png?v=20260807-enposters', 'WES Variant Analysis & Reporting System']
+      },
+      {
+        zh: ['case_poster_previews/case-03.png?v=20260806-wrapfix', '16S 菌群分析与报告系统'],
+        en: ['case_poster_previews/en/case-03.png?v=20260807-enposters', '16S Microbiome Analysis & Reporting System']
+      },
+      {
+        zh: ['case_poster_previews/case-04.png?v=20260806-wrapfix', '临床真实世界数据分析'],
+        en: ['case_poster_previews/en/case-04.png?v=20260807-enposters', 'Clinical Real-World Data Analytics']
+      },
+      {
+        zh: ['case_poster_previews/case-05.png?v=20260806-wrapfix', '医疗 AI Agent 与临床科研 AI 产品研究'],
+        en: ['case_poster_previews/en/case-05.png?v=20260807-enposters', 'Healthcare AI Agent & Clinical Research AI Product Study']
+      },
+      {
+        zh: ['case_poster_previews/case-06.png?v=20260806-wrapfix', '肿瘤临床智能决策与全周期管理系统'],
+        en: ['case_poster_previews/en/case-06.png?v=20260807-enposters', 'Oncology Clinical Decision & Lifecycle Care System']
+      }
     ];
 
     const servicePosters = [
-      ['service_poster_previews/service-01.png?v=20260806-wrapfix', '科研数据分析与论文支持'],
-      ['service_poster_previews/service-02.png?v=20260806-wrapfix', '临床实验室与生物信息系统开发'],
-      ['service_poster_previews/service-03.png?v=20260806-wrapfix', '生物医药证据与资源研究'],
-      ['service_poster_previews/service-04.png?v=20260806-wrapfix', '项目方案设计与执行支持']
+      {
+        zh: ['service_poster_previews/service-01.png?v=20260806-wrapfix', '科研数据分析与论文支持'],
+        en: ['service_poster_previews/en/service-01.png?v=20260807-enposters', 'Scientific Data Analytics & Publication Support']
+      },
+      {
+        zh: ['service_poster_previews/service-02.png?v=20260806-wrapfix', '临床实验室与生物信息系统开发'],
+        en: ['service_poster_previews/en/service-02.png?v=20260807-enposters', 'Clinical Laboratory & Bioinformatics Systems']
+      },
+      {
+        zh: ['service_poster_previews/service-03.png?v=20260806-wrapfix', '生物医药证据与资源研究'],
+        en: ['service_poster_previews/en/service-03.png?v=20260807-enposters', 'Biopharma Evidence & Resource Intelligence']
+      },
+      {
+        zh: ['service_poster_previews/service-04.png?v=20260806-wrapfix', '项目方案设计与执行支持'],
+        en: ['service_poster_previews/en/service-04.png?v=20260807-enposters', 'Program Design & Execution Support']
+      }
     ];
 
-    function mountPosterGroup(root, posters, suffix) {
-      if (!root || root.classList.contains('uses-poster-images')) return;
+    const copy = {
+      zh: {
+        serviceSuffix: '核心服务海报',
+        caseSuffix: '合作案例海报',
+        viewHint: '，点击放大查看',
+        title: '点击放大查看'
+      },
+      en: {
+        serviceSuffix: ' core service poster',
+        caseSuffix: ' case study poster',
+        viewHint: ', click to enlarge',
+        title: 'Click to enlarge'
+      }
+    };
+
+    function activePosterLang() {
+      return document.documentElement.dataset.lang === 'en' ? 'en' : 'zh';
+    }
+
+    function getPoster(poster) {
+      const lang = activePosterLang();
+      return poster[lang] || poster.zh;
+    }
+
+    function ensurePosterGroup(root, posters) {
+      if (!root) return;
       root.classList.add('uses-poster-images');
       root.querySelectorAll('.carousel-slide').forEach((slide, index) => {
         const card = slide.querySelector('article');
         const poster = posters[index];
         if (!card || !poster) return;
+        if (card.querySelector('img[data-poster-image]')) return;
 
         const image = document.createElement('img');
-        image.src = poster[0];
-        image.alt = poster[1] + suffix;
         image.width = 2560;
         image.height = 1440;
         image.decoding = 'async';
         image.loading = index === 0 ? 'eager' : 'lazy';
         image.draggable = false;
+        image.dataset.posterImage = 'true';
 
         card.className = 'case-card case-poster-card';
         card.removeAttribute('style');
-        card.setAttribute('aria-label', poster[1] + '，点击放大查看');
-        card.setAttribute('title', '点击放大查看');
         card.replaceChildren(image);
       });
     }
 
+    function updatePosterGroup(root, posters, type) {
+      if (!root) return;
+      ensurePosterGroup(root, posters);
+      const lang = activePosterLang();
+      const labels = copy[lang];
+      const suffix = type === 'service' ? labels.serviceSuffix : labels.caseSuffix;
+
+      root.querySelectorAll('.carousel-slide').forEach((slide, index) => {
+        const card = slide.querySelector('article');
+        const image = card?.querySelector('img[data-poster-image]');
+        const selected = posters[index] && getPoster(posters[index]);
+        if (!card || !image || !selected) return;
+
+        const [src, altBase] = selected;
+        if (image.getAttribute('src') !== src) image.src = src;
+        image.alt = altBase + suffix;
+        card.setAttribute('aria-label', altBase + labels.viewHint);
+        card.setAttribute('title', labels.title);
+      });
+    }
+
     function mountPosterCarousels() {
-      mountPosterGroup(
+      updatePosterGroup(
         document.querySelector('.content-carousel[data-carousel="services"]'),
         servicePosters,
-        '核心服务海报'
+        'service'
       );
-      mountPosterGroup(
+      updatePosterGroup(
         document.querySelector('.content-carousel[data-carousel="cases"]'),
         casePosters,
-        '合作案例海报'
+        'case'
       );
     }
 
@@ -4148,6 +4221,10 @@
     } else {
       mountPosterCarousels();
     }
+
+    window.addEventListener('zhitu-language-change', () => {
+      requestAnimationFrame(mountPosterCarousels);
+    });
   })();
 </script>
 

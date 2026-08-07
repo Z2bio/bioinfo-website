@@ -20,4 +20,4 @@ https://z2bio.github.io/bioinfo-website/
 - `brand_assets/` contains logo and favicon assets.
 - `service_poster_previews/` contains service carousel images.
 - `case_poster_previews/` contains case carousel images.
-
+- `service_poster_previews/en/` and `case_poster_previews/en/` contain English carousel poster images used when the site language is switched to `EN`.
