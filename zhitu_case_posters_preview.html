@@ -1,0 +1,2374 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10283a">
+  <title>知图生物｜合作案例海报式单页预览</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #10283a;
+      --ink-2: #314858;
+      --paper: #f3f1e8;
+      --paper-2: #e9eee9;
+      --line: rgba(16, 40, 58, .16);
+      --white: #fbfcf8;
+      --nav-h: 56px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: var(--ink);
+      background: #0d2232;
+      font-family: "Noto Sans SC", sans-serif;
+    }
+
+    button,
+    a { font: inherit; }
+
+    .deck {
+      position: relative;
+      height: 100svh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+    }
+
+    .poster {
+      --accent: #2e8c85;
+      --accent-rgb: 46, 140, 133;
+      --accent-2: #344d82;
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 720px;
+      height: 100svh;
+      padding: 0;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      overflow: hidden;
+      background: #0d2232;
+    }
+
+    .poster-canvas {
+      position: relative;
+      width: min(100vw, calc(100svh * 16 / 9));
+      height: min(100svh, calc(100vw * 9 / 16));
+      min-height: 720px;
+      aspect-ratio: 16 / 9;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 84% 16%, rgba(var(--accent-rgb), .13), transparent 27%),
+        radial-gradient(circle at 12% 88%, rgba(52, 77, 130, .08), transparent 31%),
+        linear-gradient(135deg, #f7f5ee 0%, #eef3ef 58%, #e7eeec 100%);
+    }
+
+    .poster-canvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      opacity: .52;
+      background-image:
+        linear-gradient(rgba(16, 40, 58, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16, 40, 58, .045) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(90deg, #000 0%, rgba(0,0,0,.52) 56%, transparent 100%);
+    }
+
+    .poster-canvas::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: -26%;
+      right: -9%;
+      width: 44%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(var(--accent-rgb), .24);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 56px rgba(var(--accent-rgb), .025),
+        0 0 0 112px rgba(var(--accent-rgb), .018);
+    }
+
+    .masthead {
+      position: absolute;
+      z-index: 8;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      height: 9.4%;
+      padding: 0 4.2%;
+      border-bottom: 1px solid var(--line);
+      background: rgba(247, 245, 238, .55);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      overflow: hidden;
+      border-radius: 13px;
+      border: 1px solid rgba(16, 40, 58, .28);
+    }
+
+    .brand-mark img {
+      display: block;
+      width: 96%;
+      height: 96%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 7px rgba(185, 207, 240, .18));
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      display: none;
+    }
+
+    .brand-mark::before { top: -4px; right: -4px; }
+    .brand-mark::after { bottom: -4px; left: -4px; }
+
+    .brand-copy strong,
+    .brand-copy span { display: block; }
+
+    .brand-copy strong {
+      font-size: clamp(13px, 1.14vw, 17px);
+      line-height: 1.05;
+      letter-spacing: .08em;
+    }
+
+    .brand-copy span {
+      margin-top: 4px;
+      color: var(--ink-2);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(7px, .58vw, 9px);
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+
+    .series-label {
+      color: var(--ink-2);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(8px, .68vw, 11px);
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .case-counter {
+      justify-self: end;
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      font-family: "IBM Plex Sans", sans-serif;
+    }
+
+    .case-counter strong {
+      color: var(--accent);
+      font-size: clamp(18px, 1.8vw, 28px);
+      line-height: 1;
+    }
+
+    .case-counter span {
+      color: var(--ink-2);
+      font-size: clamp(9px, .75vw, 12px);
+      letter-spacing: .1em;
+    }
+
+    .poster-grid {
+      position: absolute;
+      inset: 9.4% 0 7.1%;
+      display: grid;
+      grid-template-columns: 36.5% 63.5%;
+      min-width: 0;
+    }
+
+    .narrative {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      padding: 4.8% 7.4% 4.5% 10.8%;
+      border-right: 1px solid var(--line);
+    }
+
+    .case-type {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--accent);
+      font-size: clamp(9px, .78vw, 12px);
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .case-type::before {
+      content: "";
+      width: 26px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    h1 {
+      max-width: 11em;
+      margin: 5.2% 0 0;
+      font-size: clamp(36px, 3.58vw, 58px);
+      line-height: 1.06;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+    }
+
+    .english-title {
+      max-width: 35em;
+      margin-top: 3.2%;
+      color: var(--accent-2);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(10px, .94vw, 15px);
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .lead {
+      max-width: 37em;
+      margin: 5.1% 0 0;
+      color: #526775;
+      font-size: clamp(13px, 1.15vw, 18px);
+      line-height: 1.78;
+      text-align: justify;
+    }
+
+    .project-brief {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 5.2%;
+      border-top: 1px solid rgba(16, 40, 58, .16);
+      border-bottom: 1px solid rgba(16, 40, 58, .16);
+      background: rgba(255,255,255,.28);
+    }
+
+    .brief-item {
+      min-width: 0;
+      padding: 12px 10px 13px;
+      border-right: 1px solid rgba(16, 40, 58, .13);
+    }
+
+    .brief-item:first-child { padding-left: 0; }
+    .brief-item:last-child { padding-right: 0; border-right: 0; }
+
+    .brief-item span,
+    .brief-item strong { display: block; }
+
+    .brief-item span {
+      color: var(--accent);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(8px, .66vw, 10px);
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .brief-item strong {
+      margin-top: 7px;
+      color: var(--ink-2);
+      font-size: clamp(9px, .78vw, 12.5px);
+      font-weight: 600;
+      line-height: 1.48;
+    }
+
+    .delivery {
+      margin-top: auto;
+      padding-top: 3.6%;
+    }
+
+    .delivery-label {
+      color: var(--ink-2);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(9px, .76vw, 12px);
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .delivery-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .delivery-list span {
+      padding: 8px 11px;
+      border: 1px solid rgba(16, 40, 58, .13);
+      border-left: 3px solid var(--accent);
+      color: var(--ink-2);
+      background: rgba(255,255,255,.45);
+      font-size: clamp(9px, .78vw, 12px);
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .visual {
+      position: relative;
+      z-index: 2;
+      min-width: 0;
+      overflow: hidden;
+      padding: 3.9% 5.3% 4.2% 4.6%;
+    }
+
+    .visual-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3.2%;
+    }
+
+    .visual-title {
+      color: var(--ink-2);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(10px, .8vw, 13px);
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .visual-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink-2);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(9px, .68vw, 11px);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .visual-status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px rgba(var(--accent-rgb), .12);
+    }
+
+    .diagram {
+      position: relative;
+      height: calc(100% - 28px);
+      min-height: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .poster-footer {
+      position: absolute;
+      z-index: 8;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: 36.5% 1fr auto;
+      align-items: center;
+      height: 7.1%;
+      padding: 0 4.2%;
+      border-top: 1px solid var(--line);
+      background: rgba(247, 245, 238, .5);
+    }
+
+    .footer-note,
+    .footer-domain,
+    .footer-tag {
+      color: var(--ink-2);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(7px, .6vw, 10px);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .footer-domain { justify-self: center; }
+    .footer-tag { justify-self: end; color: var(--accent); font-weight: 700; }
+
+    .ghost-number {
+      position: absolute;
+      z-index: -1;
+      left: -1.2%;
+      bottom: -7%;
+      color: rgba(var(--accent-rgb), .07);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(160px, 25vw, 400px);
+      font-weight: 700;
+      line-height: .76;
+      letter-spacing: -.1em;
+      pointer-events: none;
+    }
+
+    /* Shared diagram primitives */
+    .node {
+      position: relative;
+      min-width: 0;
+      padding: 17px 18px;
+      border: 1px solid rgba(16, 40, 58, .16);
+      background: rgba(251, 252, 248, .78);
+      box-shadow: 0 10px 26px rgba(16, 40, 58, .06);
+    }
+
+    .node::before {
+      content: attr(data-step);
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      margin-bottom: 12px;
+      color: #fff;
+      background: var(--accent);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .node strong,
+    .node small { display: block; }
+
+    .node strong {
+      font-size: clamp(12px, 1.02vw, 16px);
+      line-height: 1.35;
+    }
+
+    .node small {
+      margin-top: 7px;
+      color: #697b86;
+      font-size: clamp(9px, .74vw, 11.5px);
+      line-height: 1.55;
+    }
+
+    .metric {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(16,40,58,.1);
+    }
+
+    .metric:last-child { border-bottom: 0; }
+
+    .metric span {
+      color: #687985;
+      font-size: clamp(7px, .62vw, 10px);
+    }
+
+    .metric strong {
+      color: var(--accent);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(10px, .9vw, 14px);
+    }
+
+    /* Case 01 — clinical data bus */
+    .poster--ehr { --accent: #2d7f78; --accent-rgb: 45, 127, 120; --accent-2: #344d82; }
+
+    .ehr-map {
+      display: grid;
+      grid-template-columns: 1fr 10% 1.14fr;
+      gap: 0;
+      height: 100%;
+      padding: 4.5% 0;
+    }
+
+    .ehr-sources,
+    .ehr-outputs {
+      display: grid;
+      grid-template-rows: repeat(4, minmax(0, 1fr));
+      gap: 3.6%;
+    }
+
+    .ehr-source,
+    .ehr-output {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      padding: 0 11%;
+      border: 1px solid rgba(16,40,58,.14);
+      background: rgba(255,255,255,.62);
+      font-size: clamp(10px, .88vw, 14px);
+      font-weight: 600;
+    }
+
+    .ehr-source { display: block; padding-top: 6.2%; }
+    .ehr-source strong,
+    .ehr-source small { display: block; }
+    .ehr-source strong { font-size: clamp(11px, .94vw, 15px); }
+    .ehr-source small { margin-top: 8px; color: #6a7c86; font-size: clamp(8.5px, .68vw, 10.8px); font-weight: 400; line-height: 1.5; }
+
+    .ehr-source::after,
+    .ehr-output::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 13%;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .ehr-source::after { right: -13%; }
+    .ehr-output::before { left: -13%; }
+
+    .ehr-bus {
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .ehr-bus::before {
+      content: "";
+      width: 4px;
+      height: 88%;
+      background: linear-gradient(var(--accent-2), var(--accent));
+      box-shadow: 0 0 0 7px rgba(var(--accent-rgb), .08);
+    }
+
+    .ehr-bus span {
+      position: absolute;
+      writing-mode: vertical-rl;
+      padding: 10px 5px;
+      color: #fff;
+      background: var(--ink);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(7px, .57vw, 9px);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .ehr-output {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 9%;
+      background: rgba(var(--accent-rgb), .065);
+    }
+
+    .ehr-output b {
+      color: var(--accent);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(18px, 2vw, 30px);
+    }
+
+    .ehr-output span small {
+      display: block;
+      margin-top: 4px;
+      color: #6c7f89;
+      font-size: clamp(8.5px, .66vw, 10.5px);
+      font-weight: 400;
+    }
+
+    /* Case 02 — genomic pipeline */
+    .poster--wes { --accent: #40599b; --accent-rgb: 64, 89, 155; --accent-2: #805873; }
+
+    .wes-map {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      height: 100%;
+      padding: 5% 0 4%;
+    }
+
+    .dna-ruler {
+      display: flex;
+      gap: 6px;
+      height: 16px;
+      overflow: hidden;
+      opacity: .7;
+    }
+
+    .dna-ruler i {
+      width: 4px;
+      flex: 0 0 4px;
+      background: var(--accent);
+      transform: skewX(-22deg) scaleY(var(--s, .55));
+      transform-origin: bottom;
+    }
+
+    .wes-pipeline {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 3%;
+      align-items: center;
+    }
+
+    .wes-pipeline::before {
+      content: "";
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      top: 50%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), #49a8c7 52%, #7b8178);
+    }
+
+    .wes-pipeline .node {
+      display: flex;
+      min-height: 64%;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(251,252,248,.9);
+    }
+
+    .wes-pipeline .node:nth-child(even) { transform: translateY(7%); }
+    .wes-pipeline .node:nth-child(odd) { transform: translateY(-7%); }
+
+    .wes-pipeline .node::after {
+      content: attr(data-step);
+      position: absolute;
+      right: 10px;
+      bottom: -18px;
+      color: rgba(var(--accent-rgb), .075);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(62px, 6vw, 96px);
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .variant-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      border: 1px solid rgba(16,40,58,.14);
+      background: rgba(255,255,255,.44);
+    }
+
+    .variant-strip span {
+      padding: 11px 8px;
+      border-right: 1px solid rgba(16,40,58,.12);
+      color: var(--ink-2);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(9px, .72vw, 11.5px);
+      text-align: center;
+    }
+
+    .variant-strip span:last-child { border-right: 0; }
+
+    /* Case 03 — microbiome orbital */
+    .poster--micro { --accent: #2f8f76; --accent-rgb: 47, 143, 118; --accent-2: #9b7443; }
+
+    .micro-map { height: 100%; }
+
+    .micro-core {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      display: grid;
+      place-items: center;
+      width: 28%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(var(--accent-rgb), .34);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 45% 42%, rgba(255,255,255,.95) 0 3%, transparent 4%),
+        radial-gradient(circle at 58% 62%, rgba(255,255,255,.92) 0 2%, transparent 3%),
+        radial-gradient(circle, rgba(var(--accent-rgb), .62), rgba(var(--accent-rgb), .08) 62%, transparent 64%);
+      box-shadow: 0 0 0 34px rgba(var(--accent-rgb), .04), 0 0 0 68px rgba(var(--accent-rgb), .025);
+      transform: translate(-50%, -50%);
+    }
+
+    .micro-core::before,
+    .micro-core::after {
+      content: "";
+      position: absolute;
+      border: 1px dashed rgba(var(--accent-rgb), .35);
+      border-radius: 50%;
+    }
+
+    .micro-core::before { inset: -32%; }
+    .micro-core::after { inset: -62%; }
+
+    .micro-core strong,
+    .micro-core span { position: relative; z-index: 2; display: block; text-align: center; }
+    .micro-core strong { font-family: "IBM Plex Sans", sans-serif; font-size: clamp(21px, 2.7vw, 43px); }
+    .micro-core span { margin-top: 4px; color: var(--ink-2); font-size: clamp(7px, .62vw, 10px); letter-spacing: .08em; }
+
+    .micro-orbit {
+      position: absolute;
+      width: 29%;
+      padding: 16px 17px;
+      border: 1px solid rgba(16,40,58,.15);
+      background: rgba(251,252,248,.8);
+      box-shadow: 0 10px 24px rgba(16,40,58,.05);
+    }
+
+    .micro-orbit b,
+    .micro-orbit span { display: block; }
+    .micro-orbit b { font-size: clamp(11px, .94vw, 15px); }
+    .micro-orbit span { margin-top: 7px; color: #687b86; font-size: clamp(8.5px, .68vw, 10.8px); line-height: 1.55; }
+    .micro-orbit i { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+    .micro-orbit:nth-child(2) { left: 2%; top: 7%; }
+    .micro-orbit:nth-child(3) { right: 1%; top: 8%; }
+    .micro-orbit:nth-child(4) { left: 1%; bottom: 8%; }
+    .micro-orbit:nth-child(5) { right: 2%; bottom: 7%; }
+    .micro-orbit:nth-child(2) i { right: -5px; bottom: -5px; }
+    .micro-orbit:nth-child(3) i { left: -5px; bottom: -5px; }
+    .micro-orbit:nth-child(4) i { right: -5px; top: -5px; }
+    .micro-orbit:nth-child(5) i { left: -5px; top: -5px; }
+
+    /* Case 04 — cohort / evidence */
+    .poster--rwe { --accent: #b06b3d; --accent-rgb: 176, 107, 61; --accent-2: #405f76; }
+
+    .rwe-map {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 4%;
+      height: 100%;
+      padding: 4.5% 0;
+    }
+
+    .cohort-funnel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .funnel-row {
+      position: relative;
+      align-self: center;
+      width: var(--w);
+      padding: 14px 15px;
+      border: 1px solid rgba(16,40,58,.14);
+      background: rgba(255,255,255,.68);
+      font-size: clamp(10px, .84vw, 13.5px);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .funnel-row::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -11px;
+      width: 1px;
+      height: 10px;
+      background: var(--accent);
+    }
+
+    .funnel-row:last-child::after { display: none; }
+
+    .analysis-panel {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px;
+      min-width: 0;
+      padding: 5%;
+      border: 1px solid rgba(16,40,58,.15);
+      background: rgba(251,252,248,.74);
+    }
+
+    .analysis-panel h3 {
+      margin: 0;
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(11px, .88vw, 14px);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .chart-field {
+      position: relative;
+      overflow: hidden;
+      border-left: 1px solid rgba(16,40,58,.18);
+      border-bottom: 1px solid rgba(16,40,58,.18);
+      background-image: linear-gradient(rgba(16,40,58,.045) 1px, transparent 1px);
+      background-size: 100% 25%;
+    }
+
+    .chart-field svg { width: 100%; height: 100%; overflow: visible; }
+
+    .evidence-output {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .evidence-output span {
+      padding: 7px 5px;
+      color: #fff;
+      background: var(--ink);
+      font-size: clamp(9px, .68vw, 11px);
+      text-align: center;
+    }
+
+    /* Case 05 — evidence convergence */
+    .poster--agent { --accent: #6b5b95; --accent-rgb: 107, 91, 149; --accent-2: #2f7f8b; }
+
+    .agent-map {
+      display: grid;
+      grid-template-rows: 1fr auto .8fr;
+      gap: 3.8%;
+      height: 100%;
+      padding: 4.5% 0;
+    }
+
+    .evidence-streams {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2.6%;
+    }
+
+    .evidence-streams::after {
+      content: "";
+      position: absolute;
+      left: 16.5%;
+      right: 16.5%;
+      bottom: -9%;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .stream {
+      position: relative;
+      overflow: hidden;
+      padding: 16px 16px;
+      border-top: 3px solid var(--accent);
+      background: rgba(255,255,255,.7);
+    }
+
+    .stream b,
+    .stream span { display: block; }
+    .stream b { font-size: clamp(10px, .88vw, 14px); }
+    .stream span { margin-top: 8px; color: #677b86; font-size: clamp(8.5px, .68vw, 10.8px); line-height: 1.55; }
+
+    .stream::after {
+      content: attr(data-code);
+      position: absolute;
+      right: 12px;
+      bottom: -24px;
+      color: rgba(var(--accent-rgb), .07);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(92px, 9vw, 145px);
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .evaluation-hub {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 4%;
+      padding: 13px 17px;
+      border: 1px solid rgba(var(--accent-rgb), .38);
+      background: rgba(var(--accent-rgb), .08);
+    }
+
+    .evaluation-hub::before,
+    .evaluation-hub::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      width: 1px;
+      height: 18px;
+      background: var(--accent);
+    }
+
+    .evaluation-hub::before { top: -18px; }
+    .evaluation-hub::after { bottom: -18px; }
+
+    .hub-badge {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      color: #fff;
+      background: var(--accent);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-align: center;
+    }
+
+    .hub-copy strong,
+    .hub-copy small { display: block; }
+    .hub-copy strong { font-size: clamp(10px, .9vw, 14px); }
+    .hub-copy small { margin-top: 6px; color: #697b86; font-size: clamp(8.5px, .66vw, 10.5px); }
+    .hub-guardrail { padding: 10px 12px; border: 1px solid #b48b52; color: #885e2f; background: #f4ead9; font-size: clamp(8px, .62vw, 10px); font-weight: 700; }
+
+    .decision-outputs {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2.2%;
+    }
+
+    .decision {
+      position: relative;
+      overflow: hidden;
+      padding: 16px 12px;
+      border-bottom: 3px solid var(--accent-2);
+      background: rgba(255,255,255,.72);
+      text-align: center;
+    }
+
+    .decision b,
+    .decision span { display: block; }
+    .decision b { font-size: clamp(10px, .8vw, 13px); }
+    .decision span { margin-top: 7px; color: #677b86; font-size: clamp(8px, .62vw, 10px); }
+
+    .decision::after {
+      content: attr(data-code);
+      position: absolute;
+      right: 8px;
+      bottom: -20px;
+      color: rgba(47, 127, 139, .08);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(58px, 5.4vw, 86px);
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* Case 06 — oncology layered system */
+    .poster--oncology { --accent: #8c5368; --accent-rgb: 140, 83, 104; --accent-2: #2f7780; }
+
+    .oncology-map {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 3.2%;
+      height: 100%;
+      padding: 3.8% 0;
+    }
+
+    .intake-strip,
+    .care-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1.5%;
+    }
+
+    .intake-strip span,
+    .care-strip span {
+      display: grid;
+      place-items: center;
+      min-height: 36px;
+      padding: 6px;
+      border: 1px solid rgba(16,40,58,.14);
+      color: var(--ink-2);
+      background: rgba(255,255,255,.62);
+      font-size: clamp(9px, .7vw, 11px);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .architecture-stack {
+      position: relative;
+      display: grid;
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .architecture-stack::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      top: 8%;
+      bottom: 8%;
+      width: 2px;
+      background: linear-gradient(var(--accent), var(--accent-2));
+    }
+
+    .layer {
+      display: grid;
+      grid-template-columns: minmax(96px, auto) minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      margin-left: 12px;
+      padding: 13px 16px 13px 32px;
+      border: 1px solid rgba(16,40,58,.14);
+      background: rgba(255,255,255,.7);
+    }
+
+    .layer-no {
+      color: var(--accent);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(9px, .72vw, 11.5px);
+      font-weight: 700;
+      letter-spacing: .09em;
+      white-space: nowrap;
+    }
+
+    .layer-copy strong,
+    .layer-copy span { display: block; }
+    .layer-copy strong { font-size: clamp(11px, .9vw, 14.5px); }
+    .layer-copy span { margin-top: 6px; color: #6a7c86; font-size: clamp(8.5px, .68vw, 10.8px); }
+
+    .layer-modules {
+      display: flex;
+      gap: 5px;
+    }
+
+    .layer-modules i {
+      width: 8px;
+      height: 24px;
+      background: rgba(var(--accent-rgb), calc(.22 + var(--i) * .1));
+    }
+
+    .governance-rail {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      color: #fff;
+      background: var(--ink);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(8.5px, .66vw, 10.5px);
+      letter-spacing: .08em;
+      text-align: center;
+    }
+
+    /* Brand palette — mirrors the original site's Deep Iris / Arctic Teal theme. */
+    :root {
+      --ink: #f7f7f4;
+      --ink-2: #c5ceda;
+      --paper: #293650;
+      --paper-2: #34425f;
+      --line: rgba(235, 240, 250, .13);
+      --white: rgba(250, 252, 255, .09);
+    }
+
+    html,
+    body { background: #202a3e; }
+
+    .poster,
+    .poster--ehr,
+    .poster--wes,
+    .poster--micro,
+    .poster--rwe,
+    .poster--agent,
+    .poster--oncology {
+      --accent: #66c8bb;
+      --accent-rgb: 102, 200, 187;
+      --accent-2: #b9cff0;
+      --brand-gold: #e6bd75;
+      background: #202a3e;
+    }
+
+    .poster-canvas {
+      background:
+        radial-gradient(circle at 8% 6%, rgba(109, 87, 151, .25), transparent 29%),
+        radial-gradient(circle at 91% 12%, rgba(53, 163, 154, .18), transparent 31%),
+        radial-gradient(circle at 70% 66%, rgba(77, 104, 156, .16), transparent 28%),
+        linear-gradient(155deg, #323c5d 0%, #293650 46%, #263248 100%);
+    }
+
+    .poster-canvas::before {
+      opacity: .72;
+      background-image:
+        linear-gradient(rgba(235, 240, 250, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(235, 240, 250, .035) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    .poster-canvas::after {
+      border-color: rgba(102, 200, 187, .26);
+      box-shadow:
+        0 0 0 56px rgba(102, 200, 187, .035),
+        0 0 0 112px rgba(185, 207, 240, .022);
+    }
+
+    .masthead {
+      border-color: rgba(238, 241, 250, .11);
+      background: rgba(36, 45, 70, .90);
+      box-shadow: 0 10px 30px rgba(12, 17, 35, .13);
+    }
+
+    .brand-mark {
+      border-color: rgba(238, 241, 250, .24);
+      background: rgba(255, 255, 255, .06);
+      box-shadow: 0 8px 22px rgba(12, 17, 35, .12);
+    }
+
+    .brand-mark::before,
+    .brand-mark::after { background: #293650; }
+
+    .case-type { color: #9ed8cf; }
+    .case-type::before { background: var(--brand-gold); }
+    .english-title { color: #b9cff0; }
+    .lead,
+    .node small,
+    .metric span,
+    .ehr-source small,
+    .ehr-output span small,
+    .micro-orbit span,
+    .stream span,
+    .hub-copy small,
+    .decision span,
+    .layer-copy span { color: #c5ceda; }
+
+    .narrative { border-color: rgba(235, 240, 250, .13); }
+
+    .project-brief {
+      border-color: rgba(235, 240, 250, .14);
+      background: rgba(250, 251, 255, .045);
+    }
+
+    .brief-item { border-color: rgba(235, 240, 250, .12); }
+    .brief-item span { color: #9ed8cf; }
+
+    .delivery-label { color: #e6bd75; }
+    .delivery-list span {
+      border-color: rgba(238, 241, 250, .13);
+      border-left-color: #66c8bb;
+      color: #e6ebf4;
+      background: rgba(255, 255, 255, .065);
+    }
+
+    .visual-title,
+    .visual-status { color: #dce7ea; }
+    .diagram { border-color: rgba(235, 240, 250, .13); }
+
+    .poster-footer {
+      border-color: rgba(238, 241, 250, .11);
+      background: rgba(33, 42, 62, .82);
+    }
+
+    .footer-note,
+    .footer-domain { color: #aebdca; }
+    .footer-tag { color: #9ed8cf; }
+
+    .ghost-number { color: rgba(185, 207, 240, .075); }
+
+    .node,
+    .ehr-source,
+    .ehr-output,
+    .micro-orbit,
+    .funnel-row,
+    .analysis-panel,
+    .stream,
+    .decision,
+    .intake-strip span,
+    .care-strip span,
+    .layer {
+      color: #f4f7f8;
+      border-color: rgba(238, 241, 250, .13);
+      background: rgba(250, 251, 255, .082);
+      box-shadow: 0 12px 34px rgba(12, 17, 35, .12);
+      backdrop-filter: blur(10px);
+    }
+
+    .ehr-output { background: rgba(102, 200, 187, .075); }
+    .wes-pipeline .node { background: rgba(250, 251, 255, .10); }
+    .variant-strip {
+      border-color: rgba(238, 241, 250, .13);
+      background: rgba(250, 251, 255, .055);
+    }
+    .variant-strip span { border-color: rgba(238, 241, 250, .11); }
+
+    .micro-core {
+      background:
+        radial-gradient(circle at 45% 42%, rgba(255, 255, 255, .92) 0 3%, transparent 4%),
+        radial-gradient(circle at 58% 62%, rgba(255, 255, 255, .82) 0 2%, transparent 3%),
+        radial-gradient(circle, rgba(102, 200, 187, .62), rgba(102, 200, 187, .09) 62%, transparent 64%);
+    }
+
+    .chart-field {
+      border-color: rgba(235, 240, 250, .18);
+      background-image: linear-gradient(rgba(235, 240, 250, .05) 1px, transparent 1px);
+    }
+
+    .evaluation-hub {
+      border-color: rgba(102, 200, 187, .36);
+      background: rgba(102, 200, 187, .09);
+    }
+
+    .hub-badge { color: #202c43; }
+    .hub-guardrail {
+      border-color: rgba(230, 189, 117, .45);
+      color: #f1d49f;
+      background: rgba(230, 189, 117, .10);
+    }
+
+    .ehr-bus span,
+    .evidence-output span,
+    .governance-rail {
+      color: #f7f7f4;
+      background: #202c43;
+    }
+
+    .layer-modules i { background: rgba(102, 200, 187, calc(.22 + var(--i) * .1)); }
+
+    /* Core-service poster set — only shown in service export mode. */
+    .service-poster { display: none; }
+    .service-export .poster[id^="case-"] { display: none; }
+    .service-export .service-poster { display: grid; }
+
+    .research-map {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 4.5%;
+      height: 100%;
+      padding: 4.2% 0;
+    }
+
+    .research-question,
+    .program-objective {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 3%;
+      padding: 14px 17px;
+      border: 1px solid rgba(102, 200, 187, .34);
+      background: rgba(102, 200, 187, .08);
+    }
+
+    .research-question b,
+    .program-objective b {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      color: #202c43;
+      background: #66c8bb;
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-align: center;
+    }
+
+    .research-question strong,
+    .research-question span,
+    .program-objective strong,
+    .program-objective span { display: block; }
+
+    .research-question strong,
+    .program-objective strong { font-size: clamp(12px, 1vw, 16px); }
+
+    .research-question span,
+    .program-objective span {
+      margin-top: 5px;
+      color: #c5ceda;
+      font-size: clamp(8.5px, .68vw, 10.8px);
+    }
+
+    .research-question em,
+    .program-objective em {
+      color: #e6bd75;
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(8px, .64vw, 10px);
+      font-style: normal;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .research-steps {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: center;
+      gap: 2.5%;
+    }
+
+    .research-steps::before {
+      content: '';
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      top: 50%;
+      height: 2px;
+      background: linear-gradient(90deg, #66c8bb, #b9cff0 58%, #e6bd75);
+    }
+
+    .research-step {
+      position: relative;
+      min-height: 66%;
+      padding: 17px 15px;
+      overflow: hidden;
+      border: 1px solid rgba(238, 241, 250, .13);
+      background: rgba(250, 251, 255, .09);
+      box-shadow: 0 12px 34px rgba(12, 17, 35, .12);
+    }
+
+    .research-step:nth-child(even) { transform: translateY(7%); }
+    .research-step:nth-child(odd) { transform: translateY(-7%); }
+
+    .research-step b,
+    .research-step strong,
+    .research-step span { display: block; position: relative; z-index: 2; }
+
+    .research-step b {
+      color: #66c8bb;
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(23px, 2.5vw, 40px);
+      line-height: 1;
+    }
+
+    .research-step strong { margin-top: 16px; font-size: clamp(10px, .84vw, 13.5px); }
+    .research-step span { margin-top: 8px; color: #c5ceda; font-size: clamp(8px, .65vw, 10.3px); line-height: 1.5; }
+
+    .research-step::after {
+      content: attr(data-code);
+      position: absolute;
+      right: 8px;
+      bottom: -20px;
+      color: rgba(185, 207, 240, .07);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(58px, 5.8vw, 92px);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .research-output,
+    .program-output {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .research-output span,
+    .program-output span {
+      padding: 10px 8px;
+      border: 1px solid rgba(238, 241, 250, .12);
+      color: #e6ebf4;
+      background: rgba(255, 255, 255, .055);
+      font-size: clamp(8.5px, .68vw, 10.8px);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .program-map {
+      display: grid;
+      grid-template-rows: auto 1fr auto auto;
+      gap: 3.6%;
+      height: 100%;
+      padding: 3.8% 0;
+    }
+
+    .program-workstreams {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2.4%;
+    }
+
+    .program-stream {
+      position: relative;
+      padding: 16px;
+      overflow: hidden;
+      border-top: 3px solid #66c8bb;
+      background: rgba(250, 251, 255, .082);
+    }
+
+    .program-stream b,
+    .program-stream span { display: block; position: relative; z-index: 2; }
+    .program-stream b { font-size: clamp(10px, .86vw, 14px); }
+    .program-stream span { margin-top: 8px; color: #c5ceda; font-size: clamp(8px, .66vw, 10.5px); line-height: 1.55; }
+
+    .program-stream::after {
+      content: attr(data-code);
+      position: absolute;
+      right: 10px;
+      bottom: -24px;
+      color: rgba(102, 200, 187, .07);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: clamp(74px, 7vw, 112px);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .milestone-track {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1.5%;
+      padding-top: 18px;
+    }
+
+    .milestone-track::before {
+      content: '';
+      position: absolute;
+      left: 5%;
+      right: 5%;
+      top: 8px;
+      height: 2px;
+      background: linear-gradient(90deg, #66c8bb, #b9cff0, #e6bd75);
+    }
+
+    .milestone {
+      position: relative;
+      min-width: 0;
+      padding: 12px 8px;
+      border: 1px solid rgba(238, 241, 250, .12);
+      background: rgba(255,255,255,.05);
+      text-align: center;
+    }
+
+    .milestone::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: -15px;
+      width: 10px;
+      height: 10px;
+      border: 2px solid #293650;
+      border-radius: 50%;
+      background: #66c8bb;
+      transform: translateX(-50%);
+    }
+
+    .milestone b,
+    .milestone span { display: block; }
+    .milestone b { color: #b9cff0; font-family: "IBM Plex Sans", sans-serif; font-size: clamp(8px, .64vw, 10px); }
+    .milestone span { margin-top: 6px; color: #e6ebf4; font-size: clamp(8px, .65vw, 10.5px); }
+
+    /* Compact labels are semantic units. Keep them intact while allowing the
+       surrounding columns to absorb the extra width. */
+    .case-counter,
+    .case-type,
+    .delivery-label,
+    .visual-title,
+    .visual-status,
+    .variant-strip span,
+    .intake-strip span,
+    .care-strip span,
+    .governance-rail,
+    .research-question em,
+    .program-objective em,
+    .milestone b,
+    .footer-note,
+    .footer-domain,
+    .footer-tag {
+      white-space: nowrap;
+    }
+
+    /* V33: presentation-safe typography for the exported 16:9 posters. */
+    .brand-copy span { font-size: clamp(8px, .68vw, 10px); }
+    .series-label { font-size: clamp(9px, .76vw, 12px); }
+    .case-counter span { font-size: clamp(10px, .82vw, 13px); }
+    .case-type { font-size: clamp(10px, .86vw, 13px); }
+    .english-title { font-size: clamp(11px, 1vw, 16px); }
+    .lead { font-size: clamp(14px, 1.28vw, 19px); line-height: 1.68; }
+
+    .brief-item span { font-size: clamp(9px, .74vw, 11px); }
+    .brief-item strong { font-size: clamp(10px, .86vw, 13px); line-height: 1.42; }
+    .delivery-label { font-size: clamp(10px, .84vw, 13px); }
+    .delivery-list span { font-size: clamp(10px, .86vw, 13px); }
+    .visual-title { font-size: clamp(11px, .88vw, 14px); }
+    .visual-status { font-size: clamp(9.5px, .76vw, 12px); }
+    .footer-note,
+    .footer-domain,
+    .footer-tag { font-size: clamp(8px, .68vw, 10.5px); }
+
+    .node strong { font-size: clamp(13px, 1.1vw, 17px); }
+    .node small { font-size: clamp(10px, .84vw, 13px); line-height: 1.42; }
+    .metric span { font-size: clamp(9px, .72vw, 11px); }
+    .metric strong { font-size: clamp(11px, .96vw, 15px); }
+
+    .ehr-source,
+    .ehr-output { font-size: clamp(11px, .96vw, 15px); }
+    .ehr-source strong { font-size: clamp(12px, 1.02vw, 16px); }
+    .ehr-source small,
+    .ehr-output span small { font-size: clamp(9.5px, .78vw, 12px); line-height: 1.42; }
+    .ehr-bus span { font-size: clamp(8px, .66vw, 10px); }
+    .variant-strip span { font-size: clamp(10px, .8vw, 12.5px); }
+
+    .micro-core span { font-size: clamp(8.5px, .7vw, 11px); }
+    .micro-orbit b { font-size: clamp(12px, 1.02vw, 16px); }
+    .micro-orbit span { font-size: clamp(9.5px, .78vw, 12px); line-height: 1.42; }
+
+    .funnel-row { font-size: clamp(11px, .92vw, 14.5px); }
+    .analysis-panel h3 { font-size: clamp(12px, .98vw, 15px); }
+    .evidence-output span { font-size: clamp(10px, .78vw, 12px); }
+
+    .stream b { font-size: clamp(11px, .96vw, 15px); }
+    .stream span { font-size: clamp(9.5px, .78vw, 12px); line-height: 1.42; }
+    .hub-badge { font-size: 10px; }
+    .hub-copy strong { font-size: clamp(11px, .98vw, 15px); }
+    .hub-copy small { font-size: clamp(9.5px, .76vw, 12px); }
+    .hub-guardrail { font-size: clamp(9px, .72vw, 11px); }
+    .decision b { font-size: clamp(11px, .9vw, 14px); }
+    .decision span { font-size: clamp(9px, .72vw, 11px); }
+
+    .intake-strip span,
+    .care-strip span { font-size: clamp(10px, .78vw, 12px); }
+    .layer-no { font-size: clamp(10px, .8vw, 12.5px); }
+    .layer-copy strong { font-size: clamp(12px, 1vw, 16px); }
+    .layer-copy span { font-size: clamp(9.5px, .78vw, 12px); }
+    .governance-rail { font-size: clamp(9.5px, .76vw, 12px); }
+
+    .research-question b,
+    .program-objective b { font-size: 11px; }
+    .research-question strong,
+    .program-objective strong { font-size: clamp(13px, 1.1vw, 17px); }
+    .research-question span,
+    .program-objective span { font-size: clamp(9.5px, .78vw, 12px); }
+    .research-question em,
+    .program-objective em { font-size: clamp(9px, .72vw, 11px); }
+    .research-step strong { font-size: clamp(11px, .94vw, 14.5px); }
+    .research-step span { font-size: clamp(9.5px, .76vw, 12px); line-height: 1.42; }
+    .research-output span,
+    .program-output span { font-size: clamp(9.5px, .78vw, 12px); }
+    .program-stream b { font-size: clamp(11px, .94vw, 14.5px); }
+    .program-stream span { font-size: clamp(9.5px, .76vw, 12px); line-height: 1.42; }
+    .milestone b { font-size: clamp(9px, .72vw, 11px); }
+    .milestone span { font-size: clamp(9.5px, .76vw, 12px); }
+
+    /* V34: larger reading sizes for the website carousel and fullscreen view. */
+    .english-title { font-size: clamp(12px, 1.08vw, 17px); }
+    .lead { font-size: clamp(16px, 1.45vw, 21px); line-height: 1.58; }
+    .brief-item span { font-size: clamp(9.5px, .82vw, 12px); }
+    .brief-item strong { font-size: clamp(11px, .98vw, 14px); line-height: 1.36; }
+    .delivery-label { font-size: clamp(10.5px, .92vw, 14px); }
+    .delivery-list span { padding: 8px 12px; font-size: clamp(11px, .96vw, 14px); }
+    .visual-title { font-size: clamp(11.5px, .96vw, 15px); }
+    .visual-status { font-size: clamp(10px, .84vw, 13px); }
+
+    .node strong { font-size: clamp(14px, 1.18vw, 18px); }
+    .node small { font-size: clamp(10.5px, .92vw, 13.5px); line-height: 1.36; }
+    .metric span { font-size: clamp(9.5px, .8vw, 12px); }
+
+    .ehr-source,
+    .ehr-output { font-size: clamp(12px, 1.04vw, 16px); }
+    .ehr-source strong { font-size: clamp(13px, 1.1vw, 17px); }
+    .ehr-source small,
+    .ehr-output span small { font-size: clamp(10px, .88vw, 13px); line-height: 1.34; }
+    .variant-strip span { font-size: clamp(10.5px, .9vw, 13.5px); }
+    .micro-orbit b { font-size: clamp(13px, 1.1vw, 17px); }
+    .micro-orbit span { font-size: clamp(10px, .88vw, 13px); line-height: 1.34; }
+
+    .funnel-row { font-size: clamp(12px, 1vw, 15.5px); }
+    .analysis-panel h3 { font-size: clamp(13px, 1.06vw, 16px); }
+    .evidence-output span { font-size: clamp(10.5px, .88vw, 13px); }
+    .stream b { font-size: clamp(12px, 1.04vw, 16px); }
+    .stream span { font-size: clamp(10px, .88vw, 13px); line-height: 1.34; }
+    .hub-copy strong { font-size: clamp(12px, 1.06vw, 16px); }
+    .hub-copy small { font-size: clamp(10px, .86vw, 13px); }
+    .hub-guardrail { font-size: clamp(9.5px, .8vw, 12px); }
+    .decision b { font-size: clamp(12px, .98vw, 15px); }
+    .decision span { font-size: clamp(9.5px, .82vw, 12px); }
+
+    .intake-strip span,
+    .care-strip span { font-size: clamp(10.5px, .88vw, 13px); }
+    .layer-no { font-size: clamp(10.5px, .9vw, 13.5px); }
+    .layer-copy strong { font-size: clamp(13px, 1.08vw, 17px); }
+    .layer-copy span { font-size: clamp(10px, .88vw, 13px); }
+    .governance-rail { font-size: clamp(10px, .84vw, 13px); }
+
+    .research-question strong,
+    .program-objective strong { font-size: clamp(14px, 1.18vw, 18px); }
+    .research-question span,
+    .program-objective span { font-size: clamp(10px, .88vw, 13px); }
+    .research-question em,
+    .program-objective em { font-size: clamp(9.5px, .8vw, 12px); }
+    .research-step strong { font-size: clamp(12px, 1.02vw, 15.5px); }
+    .research-step span { font-size: clamp(10px, .88vw, 13px); line-height: 1.34; }
+    .research-output span,
+    .program-output span { font-size: clamp(10px, .88vw, 13px); }
+    .program-stream b { font-size: clamp(12px, 1.02vw, 15.5px); }
+    .program-stream span { font-size: clamp(10px, .86vw, 13px); line-height: 1.34; }
+    .milestone b { font-size: clamp(9.5px, .8vw, 12px); }
+    .milestone span { font-size: clamp(10px, .86vw, 13px); }
+
+    /* Preview controls */
+    .preview-controls {
+      position: fixed;
+      z-index: 50;
+      top: 50%;
+      right: 18px;
+      display: grid;
+      gap: 8px;
+      padding: 9px 8px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(8, 25, 38, .78);
+      box-shadow: 0 16px 38px rgba(0,0,0,.22);
+      backdrop-filter: blur(16px);
+      transform: translateY(-50%);
+    }
+
+    .preview-dot {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 1px solid rgba(255,255,255,.13);
+      color: rgba(255,255,255,.54);
+      background: transparent;
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 9px;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .preview-dot:hover,
+    .preview-dot.active {
+      border-color: rgba(255,255,255,.55);
+      color: #0f2938;
+      background: #d9ece7;
+    }
+
+    .preview-tip {
+      position: fixed;
+      z-index: 50;
+      left: 18px;
+      bottom: 16px;
+      padding: 8px 11px;
+      color: rgba(255,255,255,.68);
+      background: rgba(8, 25, 38, .68);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: .08em;
+      backdrop-filter: blur(12px);
+    }
+
+    .clean-export .preview-controls,
+    .clean-export .preview-tip { display: none !important; }
+
+    .clean-export .deck {
+      scrollbar-width: none;
+    }
+
+    .clean-export .deck::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* High-resolution export keeps the 1280px composition intact and scales
+       the complete canvas to the 2048px fullscreen capture surface. */
+    html.hires-export:fullscreen,
+    html.hires-export:fullscreen body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #202c43;
+    }
+
+    html.hires-export:fullscreen .deck {
+      width: 100vw;
+      height: 100vh;
+      overflow-y: auto;
+      scroll-behavior: auto;
+    }
+
+    html.hires-export:fullscreen .poster {
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
+    }
+
+    html.hires-export:fullscreen .poster-canvas {
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
+      transform: none;
+    }
+
+    html.hires-export:fullscreen .brand { gap: .94vw; }
+    html.hires-export:fullscreen .brand-mark { width: 3.28vw; height: 3.28vw; flex-basis: 3.28vw; border-radius: 1vw; }
+    html.hires-export:fullscreen .brand-copy strong { font-size: 1.14vw; }
+    html.hires-export:fullscreen .brand-copy span { font-size: .68vw; }
+    html.hires-export:fullscreen .series-label { font-size: .76vw; }
+    html.hires-export:fullscreen .case-counter strong { font-size: 1.8vw; }
+    html.hires-export:fullscreen .case-counter span { font-size: .82vw; }
+    html.hires-export:fullscreen .case-type { font-size: .86vw; }
+    html.hires-export:fullscreen h1 { font-size: 3.58vw; }
+    html.hires-export:fullscreen .english-title { font-size: 1.08vw; }
+    html.hires-export:fullscreen .lead { font-size: 1.45vw; }
+    html.hires-export:fullscreen .brief-item { padding-top: .94vw; padding-bottom: 1vw; }
+    html.hires-export:fullscreen .brief-item span { font-size: .82vw; }
+    html.hires-export:fullscreen .brief-item strong { font-size: .98vw; }
+    html.hires-export:fullscreen .delivery-label { font-size: .92vw; }
+    html.hires-export:fullscreen .delivery-list { gap: .62vw; margin-top: .78vw; }
+    html.hires-export:fullscreen .delivery-list span { padding: .62vw .94vw; font-size: .96vw; }
+    html.hires-export:fullscreen .visual-title { font-size: .96vw; }
+    html.hires-export:fullscreen .visual-status { font-size: .84vw; }
+    html.hires-export:fullscreen .footer-note,
+    html.hires-export:fullscreen .footer-domain,
+    html.hires-export:fullscreen .footer-tag { font-size: .68vw; }
+
+    html.hires-export:fullscreen .node::before { width: 2.03vw; height: 2.03vw; margin-bottom: .94vw; font-size: .78vw; }
+    html.hires-export:fullscreen .node strong { font-size: 1.18vw; }
+    html.hires-export:fullscreen .node small { font-size: .92vw; }
+    html.hires-export:fullscreen .metric span { font-size: .8vw; }
+    html.hires-export:fullscreen .metric strong { font-size: .96vw; }
+    html.hires-export:fullscreen .ehr-source,
+    html.hires-export:fullscreen .ehr-output { font-size: 1.04vw; }
+    html.hires-export:fullscreen .ehr-source strong { font-size: 1.1vw; }
+    html.hires-export:fullscreen .ehr-source small,
+    html.hires-export:fullscreen .ehr-output span small { font-size: .88vw; }
+    html.hires-export:fullscreen .ehr-bus span { font-size: .66vw; }
+    html.hires-export:fullscreen .ehr-output b { font-size: 2vw; }
+    html.hires-export:fullscreen .ehr-output { grid-template-columns: 3vw minmax(0, 1fr); gap: 3%; }
+    html.hires-export:fullscreen .variant-strip span { font-size: .9vw; }
+    html.hires-export:fullscreen .micro-core strong { font-size: 2.7vw; }
+    html.hires-export:fullscreen .micro-core span { font-size: .7vw; }
+    html.hires-export:fullscreen .micro-orbit b { font-size: 1.1vw; }
+    html.hires-export:fullscreen .micro-orbit span { font-size: .88vw; }
+    html.hires-export:fullscreen .funnel-row { font-size: 1vw; }
+    html.hires-export:fullscreen .analysis-panel h3 { font-size: 1.06vw; }
+    html.hires-export:fullscreen .evidence-output span { font-size: .88vw; }
+    html.hires-export:fullscreen .stream b { font-size: 1.04vw; }
+    html.hires-export:fullscreen .stream span { font-size: .88vw; }
+    html.hires-export:fullscreen .hub-badge { width: 4.22vw; height: 4.22vw; font-size: .78vw; }
+    html.hires-export:fullscreen .hub-copy strong { font-size: 1.06vw; }
+    html.hires-export:fullscreen .hub-copy small { font-size: .86vw; }
+    html.hires-export:fullscreen .hub-guardrail { font-size: .8vw; }
+    html.hires-export:fullscreen .decision b { font-size: .98vw; }
+    html.hires-export:fullscreen .decision span { font-size: .82vw; }
+    html.hires-export:fullscreen .intake-strip span,
+    html.hires-export:fullscreen .care-strip span { font-size: .88vw; }
+    html.hires-export:fullscreen .layer {
+      grid-template-columns: 6.2vw minmax(0, 1fr) auto;
+      gap: 1.1vw;
+      margin-left: .94vw;
+      padding: 1vw 1.25vw 1vw 2.5vw;
+    }
+    html.hires-export:fullscreen .layer-no { font-size: .9vw; }
+    html.hires-export:fullscreen .layer-copy strong { font-size: 1.08vw; }
+    html.hires-export:fullscreen .layer-copy span { font-size: .88vw; }
+    html.hires-export:fullscreen .governance-rail { font-size: .84vw; }
+
+    html.hires-export:fullscreen .research-question b,
+    html.hires-export:fullscreen .program-objective b { width: 3.75vw; height: 3.75vw; font-size: .86vw; }
+    html.hires-export:fullscreen .research-question strong,
+    html.hires-export:fullscreen .program-objective strong { font-size: 1.18vw; }
+    html.hires-export:fullscreen .research-question span,
+    html.hires-export:fullscreen .program-objective span { font-size: .88vw; }
+    html.hires-export:fullscreen .research-question em,
+    html.hires-export:fullscreen .program-objective em { font-size: .8vw; }
+    html.hires-export:fullscreen .research-step b { font-size: 2.5vw; }
+    html.hires-export:fullscreen .research-step strong { font-size: 1.02vw; }
+    html.hires-export:fullscreen .research-step span { font-size: .88vw; }
+    html.hires-export:fullscreen .research-output span,
+    html.hires-export:fullscreen .program-output span { font-size: .88vw; }
+    html.hires-export:fullscreen .program-stream b { font-size: 1.02vw; }
+    html.hires-export:fullscreen .program-stream span { font-size: .86vw; }
+    html.hires-export:fullscreen .milestone b { font-size: .8vw; }
+    html.hires-export:fullscreen .milestone span { font-size: .86vw; }
+
+    @media (max-aspect-ratio: 4 / 3), (max-width: 760px) {
+      html,
+      body {
+        height: auto;
+        min-height: 100%;
+        overflow-x: clip;
+        overflow-y: auto;
+        background: #202a3e;
+      }
+      .deck { width: 100%; max-width: 100vw; height: auto; overflow-x: clip; overflow-y: visible; scroll-snap-type: none; }
+      .poster { width: 100%; max-width: 100vw; min-width: 0; min-height: 0; height: auto; padding: 0; overflow-x: clip; overflow-y: visible; }
+      .poster-canvas {
+        width: 100vw;
+        max-width: 100vw;
+        min-width: 0;
+        height: auto;
+        min-height: 100svh;
+        aspect-ratio: auto;
+        overflow-x: clip;
+        overflow-y: visible;
+      }
+      .masthead { position: relative; grid-template-columns: 1fr auto; height: 74px; padding: 0 24px; }
+      .series-label { display: none; }
+      .poster-grid { position: relative; inset: auto; display: block; width: 100%; max-width: 100%; min-width: 0; }
+      .narrative { min-height: 560px; padding: 56px 24px 40px; border-right: 0; border-bottom: 1px solid var(--line); }
+      h1 { max-width: 9em; margin-top: 26px; font-size: clamp(38px, 12vw, 58px); }
+      .english-title { max-width: 30em; margin-top: 18px; font-size: 11px; }
+      .lead { margin-top: 26px; font-size: 15px; }
+      .case-type,
+      h1,
+      .english-title,
+      .lead,
+      .brief-item strong,
+      .visual-title,
+      .visual-status { overflow-wrap: anywhere; }
+      .delivery-list span { white-space: normal; }
+      .delivery { margin-top: 38px; }
+      .visual { height: 600px; padding: 42px 24px 50px; }
+      .poster-footer { position: relative; grid-template-columns: 1fr auto; height: 64px; padding: 0 24px; }
+      .footer-domain { display: none; }
+      .preview-controls { top: auto; right: 10px; bottom: 12px; grid-auto-flow: column; transform: none; }
+      .preview-tip { display: none; }
+      .node { padding: 11px; }
+      .ehr-map { grid-template-columns: 1fr 11% 1.08fr; }
+      .ehr-output { grid-template-columns: 24px 1fr; gap: 7%; padding: 0 7%; }
+      .wes-pipeline { gap: 8px; }
+      .wes-pipeline .node { padding: 10px; }
+      .wes-pipeline .node::before { width: 21px; height: 21px; margin-bottom: 7px; }
+      .micro-orbit { width: 35%; padding: 10px; }
+      .micro-core { width: 28%; }
+      .rwe-map { grid-template-columns: .9fr 1.1fr; gap: 14px; }
+      .layer { grid-template-columns: 58px 1fr auto; gap: 8px; padding-left: 25px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .deck { scroll-behavior: auto; }
+      .preview-dot { transition: none; }
+    }
+
+    @media print {
+      @page { size: 16in 9in; margin: 0; }
+      html,
+      body,
+      .deck { height: auto; overflow: visible; background: #fff; }
+      .preview-controls,
+      .preview-tip { display: none !important; }
+      .poster { height: 9in; min-height: 9in; break-after: page; page-break-after: always; }
+      .poster-canvas { width: 16in; height: 9in; min-height: 9in; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck" aria-label="知图生物合作案例海报预览">
+    <section class="poster poster--ehr" id="case-01" data-index="0">
+      <div class="poster-canvas">
+        <header class="masthead">
+          <div class="brand">
+            <div class="brand-mark" aria-hidden="true"><img src="brand_assets/zhitu-logo.png" alt="" width="42" height="42"></div>
+            <div class="brand-copy"><strong>知图生物</strong><span>Zero to Biosciences</span></div>
+          </div>
+          <div class="series-label">Representative Project · Scientific Dossier</div>
+          <div class="case-counter"><strong>01</strong><span>/ 06</span></div>
+        </header>
+        <div class="poster-grid">
+          <article class="narrative">
+            <div class="ghost-number">01</div>
+            <div class="case-type">系统开发 · Clinical Data</div>
+            <h1>EHR 临床数据<br>支持系统</h1>
+            <div class="english-title">Clinical Data Support System &amp; Governed Data Architecture</div>
+            <p class="lead">基于电子健康记录（EHR）及其他临床数据，建立从数据接入、脱敏标准化、权限治理到科研应用的可追踪数据基础。</p>
+            <div class="project-brief">
+              <div class="brief-item"><span>Inputs</span><strong>EHR / LIS<br>病例表单与随访</strong></div>
+              <div class="brief-item"><span>Core</span><strong>脱敏、标准化<br>权限与质量审核</strong></div>
+              <div class="brief-item"><span>Outputs</span><strong>数据底座<br>队列与项目提取</strong></div>
+            </div>
+            <div class="delivery">
+              <div class="delivery-label">Delivery Focus / 交付重点</div>
+              <div class="delivery-list">
+                <span>需求梳理</span><span>字段映射</span><span>数据结构</span><span>权限逻辑</span><span>流程原型</span><span>迭代优化</span>
+              </div>
+            </div>
+          </article>
+          <div class="visual">
+            <div class="visual-head"><div class="visual-title">Clinical Data Bus</div><div class="visual-status">Governed &amp; Traceable</div></div>
+            <div class="diagram ehr-map">
+              <div class="ehr-sources">
+                <div class="ehr-source"><strong>EHR 电子健康记录</strong><small>诊断 · 用药 · 就诊 · 病程</small></div>
+                <div class="ehr-source"><strong>LIS 检验与检测数据</strong><small>检验结果 · 生物标志物 · 时间点</small></div>
+                <div class="ehr-source"><strong>病例表单与随访</strong><small>队列表单 · 随访记录 · 结局事件</small></div>
+                <div class="ehr-source"><strong>项目文档与外部数据</strong><small>项目资料 · 参考数据 · 外部队列</small></div>
+              </div>
+              <div class="ehr-bus"><span>Standardization Layer</span></div>
+              <div class="ehr-outputs">
+                <div class="ehr-output"><b>01</b><span>脱敏与质量审核<small>去标识化 · 逻辑校验</small></span></div>
+                <div class="ehr-output"><b>02</b><span>临床数据底座<small>数据库 · 数据字典</small></span></div>
+                <div class="ehr-output"><b>03</b><span>权限与审计<small>访问控制 · 操作留痕</small></span></div>
+                <div class="ehr-output"><b>04</b><span>查询与项目应用<small>队列构建 · 数据提取</small></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="poster-footer"><div class="footer-note">Anonymized project architecture</div><div class="footer-domain">zhitushengwu.cn</div><div class="footer-tag">Data → Governance → Application</div></footer>
+      </div>
+    </section>
+
+    <section class="poster poster--wes" id="case-02" data-index="1">
+      <div class="poster-canvas">
+        <header class="masthead">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"><img src="brand_assets/zhitu-logo.png" alt="" width="42" height="42"></div><div class="brand-copy"><strong>知图生物</strong><span>Zero to Biosciences</span></div></div>
+          <div class="series-label">Representative Project · Scientific Dossier</div>
+          <div class="case-counter"><strong>02</strong><span>/ 06</span></div>
+        </header>
+        <div class="poster-grid">
+          <article class="narrative">
+            <div class="ghost-number">02</div>
+            <div class="case-type">系统开发 · Genomics</div>
+            <h1>WES 变异分析<br>与报告系统</h1>
+            <div class="english-title">Whole-Exome Variant Analysis &amp; Reporting Workflow</div>
+            <p class="lead">围绕全外显子组测序数据，构建从质控、比对、变异检测到注释筛选和证据整合的自动化流程，输出可复核的标准化报告。</p>
+            <div class="project-brief">
+              <div class="brief-item"><span>Inputs</span><strong>FASTQ 与样本信息<br>家系 / 临床表型</strong></div>
+              <div class="brief-item"><span>Core</span><strong>QC 与比对<br>变异检测与注释</strong></div>
+              <div class="brief-item"><span>Outputs</span><strong>候选变异与证据<br>标准化报告</strong></div>
+            </div>
+            <div class="delivery">
+              <div class="delivery-label">Delivery Focus / 交付重点</div>
+              <div class="delivery-list"><span>测序质控</span><span>比对与检测</span><span>变异注释</span><span>证据筛选</span><span>报告模板</span></div>
+            </div>
+          </article>
+          <div class="visual">
+            <div class="visual-head"><div class="visual-title">Genomic Analysis Workflow</div><div class="visual-status">Reproducible Pipeline</div></div>
+            <div class="diagram wes-map">
+              <div class="dna-ruler" aria-hidden="true">
+                <i style="--s:.35"></i><i style="--s:.62"></i><i style="--s:.9"></i><i style="--s:.52"></i><i style="--s:.76"></i><i style="--s:.28"></i><i style="--s:.86"></i><i style="--s:.46"></i><i style="--s:.68"></i><i style="--s:.96"></i><i style="--s:.4"></i><i style="--s:.72"></i><i style="--s:.55"></i><i style="--s:.84"></i><i style="--s:.32"></i><i style="--s:.9"></i><i style="--s:.6"></i><i style="--s:.44"></i><i style="--s:.78"></i><i style="--s:.52"></i><i style="--s:.96"></i><i style="--s:.35"></i><i style="--s:.68"></i><i style="--s:.83"></i><i style="--s:.47"></i><i style="--s:.74"></i><i style="--s:.29"></i><i style="--s:.88"></i><i style="--s:.56"></i><i style="--s:.7"></i><i style="--s:.4"></i><i style="--s:.92"></i><i style="--s:.64"></i><i style="--s:.36"></i><i style="--s:.8"></i><i style="--s:.5"></i>
+              </div>
+              <div class="wes-pipeline">
+                <div class="node" data-step="01"><strong>测序数据与样本</strong><small>FASTQ · 样本信息<br>家系或临床表型</small></div>
+                <div class="node" data-step="02"><strong>质控、比对与检测</strong><small>QC · Alignment<br>SNV / Indel / CNV</small></div>
+                <div class="node" data-step="03"><strong>注释、筛选与证据</strong><small>频率 · 功能 · 表型<br>疾病库与文献</small></div>
+                <div class="node" data-step="04"><strong>审核、解释与报告</strong><small>候选变异 · 证据说明<br>图表与标准报告</small></div>
+              </div>
+              <div class="variant-strip"><span>SNV</span><span>INDEL</span><span>CNV</span><span>PHENOTYPE</span><span>EVIDENCE</span></div>
+            </div>
+          </div>
+        </div>
+        <footer class="poster-footer"><div class="footer-note">Anonymized genomic workflow</div><div class="footer-domain">zhitushengwu.cn</div><div class="footer-tag">FASTQ → Variant → Evidence</div></footer>
+      </div>
+    </section>
+
+    <section class="poster poster--micro" id="case-03" data-index="2">
+      <div class="poster-canvas">
+        <header class="masthead">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"><img src="brand_assets/zhitu-logo.png" alt="" width="42" height="42"></div><div class="brand-copy"><strong>知图生物</strong><span>Zero to Biosciences</span></div></div>
+          <div class="series-label">Representative Project · Scientific Dossier</div>
+          <div class="case-counter"><strong>03</strong><span>/ 06</span></div>
+        </header>
+        <div class="poster-grid">
+          <article class="narrative">
+            <div class="ghost-number">03</div>
+            <div class="case-type">微生物分析 · Microbiome</div>
+            <h1>16S 菌群分析<br>与报告系统</h1>
+            <div class="english-title">Microbiome Analysis, Interpretation &amp; Reporting Framework</div>
+            <p class="lead">面向临床研究、健康管理及科研样本，将 16S 测序结果与样本背景信息结合，形成菌群结构、文献关联特征、功能预测与宿主特征关联的结构化报告。</p>
+            <div class="project-brief">
+              <div class="brief-item"><span>Inputs</span><strong>16S 测序数据<br>样本与背景信息</strong></div>
+              <div class="brief-item"><span>Core</span><strong>丰度与多样性<br>功能与文献关联</strong></div>
+              <div class="brief-item"><span>Outputs</span><strong>结构化报告<br>审核与专业复核</strong></div>
+            </div>
+            <div class="delivery">
+              <div class="delivery-label">Delivery Focus / 交付重点</div>
+              <div class="delivery-list"><span>16S 分析流程</span><span>菌群结构</span><span>文献关联解读</span><span>报告引擎</span><span>审核规则</span><span>部署培训</span></div>
+            </div>
+          </article>
+          <div class="visual">
+            <div class="visual-head"><div class="visual-title">Clinical 16S Report Framework</div><div class="visual-status">Research Use &amp; Review</div></div>
+            <div class="diagram micro-map">
+              <div class="micro-core"><div><strong>16S</strong><span>MICROBIOME CORE</span></div></div>
+              <div class="micro-orbit"><i></i><b>菌群结构与组成</b><span>多样性 · 均匀性 · 丰度分布<br>主要菌群与结构指标</span></div>
+              <div class="micro-orbit"><i></i><b>文献关联与重点菌群</b><span>常见共生菌 · 机会性菌<br>丰度偏离提示</span></div>
+              <div class="micro-orbit"><i></i><b>功能与代谢潜能预测</b><span>维生素 · 氨基酸 · 短链脂肪酸<br>通路级预测指标</span></div>
+              <div class="micro-orbit"><i></i><b>宿主特征与菌群关联</b><span>肠脑轴 · 肝肠轴 · 生活方式<br>文献报道的宿主关联</span></div>
+            </div>
+          </div>
+        </div>
+        <footer class="poster-footer"><div class="footer-note">For research and professional interpretation</div><div class="footer-domain">zhitushengwu.cn</div><div class="footer-tag">Sample → Profile → Report</div></footer>
+      </div>
+    </section>
+
+    <section class="poster poster--rwe" id="case-04" data-index="3">
+      <div class="poster-canvas">
+        <header class="masthead">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"><img src="brand_assets/zhitu-logo.png" alt="" width="42" height="42"></div><div class="brand-copy"><strong>知图生物</strong><span>Zero to Biosciences</span></div></div>
+          <div class="series-label">Representative Project · Scientific Dossier</div>
+          <div class="case-counter"><strong>04</strong><span>/ 06</span></div>
+        </header>
+        <div class="poster-grid">
+          <article class="narrative">
+            <div class="ghost-number">04</div>
+            <div class="case-type">科研与证据 · Real-World Evidence</div>
+            <h1>临床真实世界<br>数据分析</h1>
+            <div class="english-title">Clinical &amp; Real-World Data Analytics</div>
+            <p class="lead">基于脱敏后的患者级数据，开展队列构建、变量清洗、结局定义、统计建模与稳健性验证，形成可复核的证据、图表和研究成果。</p>
+            <div class="project-brief">
+              <div class="brief-item"><span>Inputs</span><strong>脱敏患者级数据<br>研究问题与结局</strong></div>
+              <div class="brief-item"><span>Core</span><strong>队列、变量、时间零点<br>统计与因果模型</strong></div>
+              <div class="brief-item"><span>Outputs</span><strong>统计表与发表图<br>研究报告 / 文稿</strong></div>
+            </div>
+            <div class="delivery">
+              <div class="delivery-label">Delivery Focus / 交付重点</div>
+              <div class="delivery-list"><span>数据审核</span><span>研究设计</span><span>统计与因果分析</span><span>发表级图表</span><span>结果解释</span><span>文稿支持</span></div>
+            </div>
+          </article>
+          <div class="visual">
+            <div class="visual-head"><div class="visual-title">Cohort → Model → Evidence</div><div class="visual-status">De-identified RWD</div></div>
+            <div class="diagram rwe-map">
+              <div class="cohort-funnel">
+                <div class="funnel-row" style="--w:100%">数据源与安全边界</div>
+                <div class="funnel-row" style="--w:86%">入排标准与队列构建</div>
+                <div class="funnel-row" style="--w:72%">暴露、结局与时间零点</div>
+                <div class="funnel-row" style="--w:58%">变量清洗与数据字典</div>
+                <div class="funnel-row" style="--w:44%; color:#fff; background:var(--accent); border-color:var(--accent)">分析队列</div>
+              </div>
+              <div class="analysis-panel">
+                <h3>Robustness &amp; Causal Analysis</h3>
+                <div class="chart-field">
+                  <svg viewBox="0 0 320 220" role="img" aria-label="生存与敏感性分析示意曲线">
+                    <path d="M0 20 C36 24, 52 34, 74 45 S116 82, 144 96 S190 132, 220 144 S264 174, 320 185" fill="none" stroke="#e6bd75" stroke-width="4"/>
+                    <path d="M0 22 C42 27, 61 48, 88 59 S137 100, 165 116 S205 145, 242 158 S284 184, 320 196" fill="none" stroke="#66c8bb" stroke-width="3" stroke-dasharray="7 7"/>
+                    <g fill="#e6bd75"><circle cx="74" cy="45" r="4"/><circle cx="144" cy="96" r="4"/><circle cx="220" cy="144" r="4"/><circle cx="320" cy="185" r="4"/></g>
+                  </svg>
+                </div>
+                <div class="evidence-output"><span>统计表</span><span>发表图</span><span>研究报告</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="poster-footer"><div class="footer-note">De-identified patient-level analytics</div><div class="footer-domain">zhitushengwu.cn</div><div class="footer-tag">Question → Cohort → Evidence</div></footer>
+      </div>
+    </section>
+
+    <section class="poster poster--agent" id="case-05" data-index="4">
+      <div class="poster-canvas">
+        <header class="masthead">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"><img src="brand_assets/zhitu-logo.png" alt="" width="42" height="42"></div><div class="brand-copy"><strong>知图生物</strong><span>Zero to Biosciences</span></div></div>
+          <div class="series-label">Representative Project · Scientific Dossier</div>
+          <div class="case-counter"><strong>05</strong><span>/ 06</span></div>
+        </header>
+        <div class="poster-grid">
+          <article class="narrative">
+            <div class="ghost-number">05</div>
+            <div class="case-type">产品研究与战略 · Healthcare AI</div>
+            <h1>医疗 AI Agent<br>与临床科研 AI<br>产品研究</h1>
+            <div class="english-title">Competitive Intelligence &amp; Product Decision Framework</div>
+            <p class="lead">通过公开资料研究、统一 Case 实测和目标用户调研，建立可复核的评分体系，用于判断产品定位、能力优先级与阶段落地路线。</p>
+            <div class="project-brief">
+              <div class="brief-item"><span>Inputs</span><strong>公开资料、产品实测<br>问卷与用户访谈</strong></div>
+              <div class="brief-item"><span>Core</span><strong>分层评估体系<br>错误红线与封顶</strong></div>
+              <div class="brief-item"><span>Outputs</span><strong>定位与能力优先级<br>90 天阶段路线</strong></div>
+            </div>
+            <div class="delivery">
+              <div class="delivery-label">Delivery Focus / 交付重点</div>
+              <div class="delivery-list"><span>竞品矩阵</span><span>统一 Case 测试</span><span>用户调研</span><span>分层评分</span><span>产品定位</span><span>阶段路线</span></div>
+            </div>
+          </article>
+          <div class="visual">
+            <div class="visual-head"><div class="visual-title">Evidence Convergence</div><div class="visual-status">Decision-Grade Research</div></div>
+            <div class="diagram agent-map">
+              <div class="evidence-streams">
+                <div class="stream" data-code="A"><b>A · 市场与产品定位</b><span>医生、证据、科研与院内入口<br>功能、工作流与中国适配</span></div>
+                <div class="stream" data-code="B"><b>B · 统一 Case 实测</b><span>临床循证与药物安全<br>引用真实性与论断支持</span></div>
+                <div class="stream" data-code="C"><b>C · 目标用户研究</b><span>用户角色与真实任务<br>AI 使用、信任、付费与采购</span></div>
+              </div>
+              <div class="evaluation-hub">
+                <div class="hub-badge">EVALUATION<br>HUB</div>
+                <div class="hub-copy"><strong>分层评分，不用单一“万能总分”</strong><small>医学 / 科研可信度 · 产品体验 · 中国落地适配性</small></div>
+                <div class="hub-guardrail">红线机制<br>严重错误封顶</div>
+              </div>
+              <div class="decision-outputs">
+                <div class="decision" data-code="01"><b>产品定位</b><span>目标入口与差异化</span></div>
+                <div class="decision" data-code="02"><b>能力优先级</b><span>P0 / P1 / P2 路线</span></div>
+                <div class="decision" data-code="03"><b>落地计划</b><span>90 天样板与工作流</span></div>
+                <div class="decision" data-code="04"><b>验收指标</b><span>可信度 · 效率 · 使用率</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="poster-footer"><div class="footer-note">Public sources + product tests + user research</div><div class="footer-domain">zhitushengwu.cn</div><div class="footer-tag">Evidence → Evaluation → Decision</div></footer>
+      </div>
+    </section>
+
+    <section class="poster poster--oncology" id="case-06" data-index="5">
+      <div class="poster-canvas">
+        <header class="masthead">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"><img src="brand_assets/zhitu-logo.png" alt="" width="42" height="42"></div><div class="brand-copy"><strong>知图生物</strong><span>Zero to Biosciences</span></div></div>
+          <div class="series-label">Representative Project · Scientific Dossier</div>
+          <div class="case-counter"><strong>06</strong><span>/ 06</span></div>
+        </header>
+        <div class="poster-grid">
+          <article class="narrative">
+            <div class="ghost-number">06</div>
+            <div class="case-type">临床智能系统 · Oncology</div>
+            <h1>肿瘤临床智能决策<br>与全周期管理系统</h1>
+            <div class="english-title">Oncology Decision, Governance &amp; Longitudinal Care Architecture</div>
+            <p class="lead">围绕肿瘤辅助决策、疾病风险监管与长期健康管理，设计多模态接入、规则与知识映射、人工复核、报告服务和审计治理的分层架构。</p>
+            <div class="project-brief">
+              <div class="brief-item"><span>Inputs</span><strong>组学、影像、检验<br>病历与治疗信息</strong></div>
+              <div class="brief-item"><span>Core</span><strong>知识映射与规则<br>证据分级与复核</strong></div>
+              <div class="brief-item"><span>Outputs</span><strong>决策辅助与风险监测<br>长期随访管理</strong></div>
+            </div>
+            <div class="delivery">
+              <div class="delivery-label">Delivery Focus / 交付重点</div>
+              <div class="delivery-list"><span>产品定义</span><span>分层架构</span><span>对象模型</span><span>证据分级</span><span>人工复核</span><span>审计治理</span><span>阶段路线</span></div>
+            </div>
+          </article>
+          <div class="visual">
+            <div class="visual-head"><div class="visual-title">Layered Clinical Architecture</div><div class="visual-status">Human-in-the-loop</div></div>
+            <div class="diagram oncology-map">
+              <div class="intake-strip"><span>VCF / WES / WGS</span><span>检测报告</span><span>病理与影像</span><span>检验指标</span><span>病例与治疗</span></div>
+              <div class="architecture-stack">
+                <div class="layer"><div class="layer-no">LAYER 1</div><div class="layer-copy"><strong>多模态接入与病例对象层</strong><span>Clinical Objects · Case Bundle · 来源与版本追踪</span></div><div class="layer-modules" aria-hidden="true"><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div></div>
+                <div class="layer"><div class="layer-no">LAYER 2</div><div class="layer-copy"><strong>临床决策、知识映射与人工复核层</strong><span>规则引擎 · 证据分级 · Case Orchestrator · Review Workflow</span></div><div class="layer-modules" aria-hidden="true"><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div></div>
+                <div class="layer"><div class="layer-no">LAYER 3</div><div class="layer-copy"><strong>科研增强与候选知识生产</strong><span>机制解释 · RAG / LLM · 条件触发模型 · 强制人工复核</span></div><div class="layer-modules" aria-hidden="true"><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i></div></div>
+                <div class="governance-rail">LAYER 4 · 评估中心 · 版本注册 · 审计日志 · 变更控制 · 经验记忆</div>
+              </div>
+              <div class="care-strip"><span>诊断与分型</span><span>治疗与用药辅助</span><span>风险评估</span><span>动态监测</span><span>长期随访</span></div>
+            </div>
+          </div>
+        </div>
+        <footer class="poster-footer"><div class="footer-note">Architecture concept for governed clinical systems</div><div class="footer-domain">zhitushengwu.cn</div><div class="footer-tag">Intake → Decision → Care Loop</div></footer>
+      </div>
+    </section>
+
+    <section class="poster poster--ehr service-poster" id="service-01" data-index="0">
+      <div class="poster-canvas">
+        <header class="masthead">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"><img src="brand_assets/zhitu-logo.png" alt="" width="42" height="42"></div><div class="brand-copy"><strong>知图生物</strong><span>Zero to Biosciences</span></div></div>
+          <div class="series-label">Core Service · Research &amp; Publication</div>
+          <div class="case-counter"><strong>01</strong><span>/ 04</span></div>
+        </header>
+        <div class="poster-grid">
+          <article class="narrative">
+            <div class="ghost-number">01</div>
+            <div class="case-type">核心服务 · Research Analytics</div>
+            <h1>科研数据分析<br>与论文支持</h1>
+            <div class="english-title">Research Analytics &amp; Publication Support</div>
+            <p class="lead">面向临床真实数据、患者队列、公开数据库和多组学项目，从研究问题与数据可行性出发，完成分析、解释和论文阶段支持。</p>
+            <div class="project-brief">
+              <div class="brief-item"><span>Inputs</span><strong>临床与队列数据<br>公开库与多组学</strong></div>
+              <div class="brief-item"><span>Core</span><strong>研究设计、统计<br>生信与稳健性分析</strong></div>
+              <div class="brief-item"><span>Outputs</span><strong>发表图表、方法<br>结果与论文支持</strong></div>
+            </div>
+            <div class="delivery">
+              <div class="delivery-label">Delivery Focus / 交付重点</div>
+              <div class="delivery-list"><span>课题设计</span><span>数据审核</span><span>统计与生信</span><span>发表级图表</span><span>论文返修</span><span>中英文协作</span></div>
+            </div>
+          </article>
+          <div class="visual">
+            <div class="visual-head"><div class="visual-title">Research → Evidence → Publication</div><div class="visual-status">Question-Led &amp; Reproducible</div></div>
+            <div class="diagram research-map">
+              <div class="research-question"><b>RQ</b><div><strong>研究问题与数据可行性审核</strong><span>目标、样本量、变量、数据质量与分析边界</span></div><em>Design Gate</em></div>
+              <div class="research-steps">
+                <div class="research-step" data-code="01"><b>01</b><strong>研究与统计设计</strong><span>课题框架 · 结局定义<br>分析方案 · 偏倚控制</span></div>
+                <div class="research-step" data-code="02"><b>02</b><strong>数据整理与质控</strong><span>数据清洗 · 字典<br>缺失异常 · 对齐审核</span></div>
+                <div class="research-step" data-code="03"><b>03</b><strong>统计与生信分析</strong><span>队列 · 多组学 · 建模<br>亚组与稳健性验证</span></div>
+                <div class="research-step" data-code="04"><b>04</b><strong>解释与成果整理</strong><span>图表 · 方法 · 结果<br>论文逻辑与补充分析</span></div>
+              </div>
+              <div class="research-output"><span>Publication-ready Figures</span><span>Methods &amp; Results Package</span><span>Manuscript &amp; Revision Support</span></div>
+            </div>
+          </div>
+        </div>
+        <footer class="poster-footer"><div class="footer-note">Clinical · cohort · public database · multi-omics</div><div class="footer-domain">zhitushengwu.cn</div><div class="footer-tag">Question → Analysis → Publication</div></footer>
+      </div>
+    </section>
+
+    <section class="poster poster--oncology service-poster" id="service-02" data-index="1">
+      <div class="poster-canvas">
+        <header class="masthead">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"><img src="brand_assets/zhitu-logo.png" alt="" width="42" height="42"></div><div class="brand-copy"><strong>知图生物</strong><span>Zero to Biosciences</span></div></div>
+          <div class="series-label">Core Service · Bioinformatics Systems</div>
+          <div class="case-counter"><strong>02</strong><span>/ 04</span></div>
+        </header>
+        <div class="poster-grid">
+          <article class="narrative">
+            <div class="ghost-number">02</div>
+            <div class="case-type">核心服务 · System Engineering</div>
+            <h1>临床实验室与<br>生物信息系统开发</h1>
+            <div class="english-title">Clinical Laboratory &amp; Bioinformatics Systems</div>
+            <p class="lead">根据业务流程、样例数据和报告需求，构建可运行、可追踪、可维护的分析流程与报告系统，支持临检及科研生产化场景。</p>
+            <div class="project-brief">
+              <div class="brief-item"><span>Inputs</span><strong>测序与检验数据<br>业务流程与报告需求</strong></div>
+              <div class="brief-item"><span>Core</span><strong>自动质控、调度<br>分析与解释引擎</strong></div>
+              <div class="brief-item"><span>Outputs</span><strong>可部署系统<br>报告、文档与培训</strong></div>
+            </div>
+            <div class="delivery">
+              <div class="delivery-label">Delivery Focus / 交付重点</div>
+              <div class="delivery-list"><span>16S / 宏基因组</span><span>WES / WGS</span><span>任务调度</span><span>报告引擎</span><span>私有化部署</span><span>验证培训</span></div>
+            </div>
+          </article>
+          <div class="visual">
+            <div class="visual-head"><div class="visual-title">Operational Bioinformatics Stack</div><div class="visual-status">Traceable &amp; Maintainable</div></div>
+            <div class="diagram oncology-map">
+              <div class="intake-strip"><span>16S / Meta</span><span>WES / WGS</span><span>RNA-seq</span><span>LIS / EHR</span><span>报告需求</span></div>
+              <div class="architecture-stack">
+                <div class="layer"><div class="layer-no">LAYER 1</div><div class="layer-copy"><strong>数据接入、质控与流程编排</strong><span>Input Validation · QC · Workflow · Scheduler · Logs</span></div><div class="layer-modules" aria-hidden="true"><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div></div>
+                <div class="layer"><div class="layer-no">LAYER 2</div><div class="layer-copy"><strong>分析、解释与报告服务</strong><span>Analysis Modules · Interpretation Rules · Report Engine</span></div><div class="layer-modules" aria-hidden="true"><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div></div>
+                <div class="layer"><div class="layer-no">LAYER 3</div><div class="layer-copy"><strong>部署、权限与持续运维</strong><span>On-prem / Cloud · Access Control · Versions · Monitoring</span></div><div class="layer-modules" aria-hidden="true"><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i></div></div>
+                <div class="governance-rail">VALIDATION · DOCUMENTATION · TRAINING · ITERATION · AUDIT TRAIL</div>
+              </div>
+              <div class="care-strip"><span>自动质控</span><span>任务追踪</span><span>版本管理</span><span>报告生成</span><span>运维监控</span></div>
+            </div>
+          </div>
+        </div>
+        <footer class="poster-footer"><div class="footer-note">Clinical laboratory and production-grade research workflows</div><div class="footer-domain">zhitushengwu.cn</div><div class="footer-tag">Input → Pipeline → Report → Deploy</div></footer>
+      </div>
+    </section>
+
+    <section class="poster poster--agent service-poster" id="service-03" data-index="2">
+      <div class="poster-canvas">
+        <header class="masthead">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"><img src="brand_assets/zhitu-logo.png" alt="" width="42" height="42"></div><div class="brand-copy"><strong>知图生物</strong><span>Zero to Biosciences</span></div></div>
+          <div class="series-label">Core Service · Evidence &amp; Resources</div>
+          <div class="case-counter"><strong>03</strong><span>/ 04</span></div>
+        </header>
+        <div class="poster-grid">
+          <article class="narrative">
+            <div class="ghost-number">03</div>
+            <div class="case-type">核心服务 · Biopharma Intelligence</div>
+            <h1>生物医药证据<br>与资源研究</h1>
+            <div class="english-title">Biopharma Evidence &amp; Resource Intelligence</div>
+            <p class="lead">围绕疾病领域、研发阶段与证据需求，系统研究市场和临床证据、医院能力、病例样本与数据资源，形成合作对象优先级。</p>
+            <div class="project-brief">
+              <div class="brief-item"><span>Inputs</span><strong>疾病与研发阶段<br>证据与合作目标</strong></div>
+              <div class="brief-item"><span>Core</span><strong>市场、医院与科室<br>数据资源系统调研</strong></div>
+              <div class="brief-item"><span>Outputs</span><strong>资源地图、匹配评分<br>合作路径与风险建议</strong></div>
+            </div>
+            <div class="delivery">
+              <div class="delivery-label">Delivery Focus / 交付重点</div>
+              <div class="delivery-list"><span>疾病研究</span><span>证据图谱</span><span>医院画像</span><span>数据可得性</span><span>优先级评分</span><span>合作建议</span></div>
+            </div>
+          </article>
+          <div class="visual">
+            <div class="visual-head"><div class="visual-title">Evidence-to-Partner Mapping</div><div class="visual-status">Decision-Grade Intelligence</div></div>
+            <div class="diagram agent-map">
+              <div class="evidence-streams">
+                <div class="stream" data-code="A"><b>A · 疾病与证据研究</b><span>疾病负担 · 诊疗路径 · 研发格局<br>临床证据 · 指南与研究空白</span></div>
+                <div class="stream" data-code="B"><b>B · 医院与专家资源</b><span>医院层级 · 科室能力 · 专家方向<br>病例量、研究经验与协作条件</span></div>
+                <div class="stream" data-code="C"><b>C · 数据与样本资源</b><span>患者队列 · 生物样本 · 多模态数据<br>可得性、质量与合规边界</span></div>
+              </div>
+              <div class="evaluation-hub">
+                <div class="hub-badge">MATCHING<br>HUB</div>
+                <div class="hub-copy"><strong>证据需求 × 资源能力 × 合作可行性</strong><small>统一口径 · 分层评分 · 信息来源留痕 · 人工复核</small></div>
+                <div class="hub-guardrail">风险审查<br>隐私 · 伦理 · 执行</div>
+              </div>
+              <div class="decision-outputs">
+                <div class="decision" data-code="01"><b>疾病地图</b><span>市场与证据全景</span></div>
+                <div class="decision" data-code="02"><b>能力画像</b><span>医院科室与专家</span></div>
+                <div class="decision" data-code="03"><b>资源清单</b><span>病例样本与数据</span></div>
+                <div class="decision" data-code="04"><b>合作路径</b><span>优先级与下一步</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="poster-footer"><div class="footer-note">Public evidence + resource research + partner screening</div><div class="footer-domain">zhitushengwu.cn</div><div class="footer-tag">Evidence → Resources → Match</div></footer>
+      </div>
+    </section>
+
+    <section class="poster poster--rwe service-poster" id="service-04" data-index="3">
+      <div class="poster-canvas">
+        <header class="masthead">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"><img src="brand_assets/zhitu-logo.png" alt="" width="42" height="42"></div><div class="brand-copy"><strong>知图生物</strong><span>Zero to Biosciences</span></div></div>
+          <div class="series-label">Core Service · Program Delivery</div>
+          <div class="case-counter"><strong>04</strong><span>/ 04</span></div>
+        </header>
+        <div class="poster-grid">
+          <article class="narrative">
+            <div class="ghost-number">04</div>
+            <div class="case-type">核心服务 · Program Execution</div>
+            <h1>项目方案设计<br>与执行支持</h1>
+            <div class="english-title">Program Design &amp; Execution Support</div>
+            <p class="lead">面向复杂、多方和跨学科项目，将业务目标拆解为技术路线、工作包、里程碑与验收标准，并持续管理协作、风险和变更。</p>
+            <div class="project-brief">
+              <div class="brief-item"><span>Inputs</span><strong>项目目标与约束<br>多方资料与资源条件</strong></div>
+              <div class="brief-item"><span>Core</span><strong>路线、工作包、预算<br>协作与风险控制</strong></div>
+              <div class="brief-item"><span>Outputs</span><strong>阶段汇报、验收资料<br>整合成果与最终交付</strong></div>
+            </div>
+            <div class="delivery">
+              <div class="delivery-label">Delivery Focus / 交付重点</div>
+              <div class="delivery-list"><span>目标拆解</span><span>技术路线</span><span>工作包预算</span><span>SOP 与验收</span><span>风险变更</span><span>结果整合</span></div>
+            </div>
+          </article>
+          <div class="visual">
+            <div class="visual-head"><div class="visual-title">Program Control Tower</div><div class="visual-status">Milestone-Governed Delivery</div></div>
+            <div class="diagram program-map">
+              <div class="program-objective"><b>OBJ</b><div><strong>目标拆解与技术路线设计</strong><span>范围、资源、周期、预算、责任边界与验收标准</span></div><em>Scope Gate</em></div>
+              <div class="program-workstreams">
+                <div class="program-stream" data-code="A"><b>A · 技术与数据工作流</b><span>数据字典 · SOP · 分析/开发路线<br>接口、质量标准与技术风险</span></div>
+                <div class="program-stream" data-code="B"><b>B · 协作与资源工作流</b><span>医院 · 实验 · 数据 · 算法 · 供应商<br>职责矩阵、依赖关系与沟通机制</span></div>
+                <div class="program-stream" data-code="C"><b>C · 治理与交付工作流</b><span>预算、进度、风险与变更管理<br>阶段汇报、评审与验收控制</span></div>
+              </div>
+              <div class="milestone-track">
+                <div class="milestone"><b>M1</b><span>需求与范围</span></div><div class="milestone"><b>M2</b><span>方案与计划</span></div><div class="milestone"><b>M3</b><span>分析 / 开发</span></div><div class="milestone"><b>M4</b><span>阶段评审</span></div><div class="milestone"><b>M5</b><span>验收与交付</span></div>
+              </div>
+              <div class="program-output"><span>Decision Log &amp; Risk Register</span><span>Milestone Reports &amp; Acceptance</span><span>Integrated Final Deliverables</span></div>
+            </div>
+          </div>
+        </div>
+        <footer class="poster-footer"><div class="footer-note">Multi-stakeholder · cross-disciplinary · milestone governed</div><div class="footer-domain">zhitushengwu.cn</div><div class="footer-tag">Scope → Execute → Review → Deliver</div></footer>
+      </div>
+    </section>
+  </main>
+
+  <nav class="preview-controls" aria-label="案例页选择">
+    <button class="preview-dot active" type="button" data-target="case-01" aria-label="查看案例 1">01</button>
+    <button class="preview-dot" type="button" data-target="case-02" aria-label="查看案例 2">02</button>
+    <button class="preview-dot" type="button" data-target="case-03" aria-label="查看案例 3">03</button>
+    <button class="preview-dot" type="button" data-target="case-04" aria-label="查看案例 4">04</button>
+    <button class="preview-dot" type="button" data-target="case-05" aria-label="查看案例 5">05</button>
+    <button class="preview-dot" type="button" data-target="case-06" aria-label="查看案例 6">06</button>
+  </nav>
+  <div class="preview-tip">滚轮 / ↑↓ 切换海报 · 16:9 单页预览</div>
+
+  <script>
+    (() => {
+      const query = new URLSearchParams(window.location.search);
+
+      if (query.has('clean')) {
+        document.documentElement.classList.add('clean-export');
+      }
+
+      if (query.get('mode') === 'services') {
+        document.documentElement.classList.add('service-export');
+      }
+
+      if (query.has('hires')) {
+        document.documentElement.classList.add('hires-export');
+      }
+
+      const deck = document.getElementById('deck');
+
+      if (query.has('hires')) {
+        deck.addEventListener('click', () => {
+          document.documentElement.requestFullscreen?.().catch(() => {});
+        }, { once: true });
+      }
+      const posters = [...document.querySelectorAll('.poster')]
+        .filter((poster) => getComputedStyle(poster).display !== 'none');
+      const controls = [...document.querySelectorAll('.preview-dot')];
+
+      const activate = (id) => {
+        controls.forEach((control) => control.classList.toggle('active', control.dataset.target === id));
+      };
+
+      controls.forEach((control) => {
+        control.addEventListener('click', () => {
+          const target = document.getElementById(control.dataset.target);
+          target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > .55) activate(entry.target.id);
+        });
+      }, { root: deck, threshold: [.55, .8] });
+
+      posters.forEach((poster) => observer.observe(poster));
+
+      window.addEventListener('keydown', (event) => {
+        if (!['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp'].includes(event.key)) return;
+        event.preventDefault();
+        const current = controls.findIndex((control) => control.classList.contains('active'));
+        const direction = event.key === 'ArrowDown' || event.key === 'PageDown' ? 1 : -1;
+        const next = Math.min(posters.length - 1, Math.max(0, current + direction));
+        posters[next].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    })();
+  </script>
+</body>
+</html>
